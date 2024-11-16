@@ -5,6 +5,14 @@ class Queen
     @color = color
   end
 
+  def self.starting_range?(row, col)
+    starting_rows = [0, 7]
+    starting_cols = [3]
+    return true if starting_rows.include?(row) && starting_cols.include?(col)
+
+    false
+  end
+
   def self.starting_range_black?(row, col)
     starting_rows = [0]
     starting_cols = [3]
