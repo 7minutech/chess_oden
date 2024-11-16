@@ -33,12 +33,23 @@ class Board
   def fill_board
     @board.each_index do |row|
       @board.each_index do |col|
-        @board[row][col] = Rook.new if Rook.starting_range?(row, col)
-        @board[row][col] = Knight.new if Knight.starting_range?(row, col)
-        @board[row][col] = Bishop.new if Bishop.starting_range?(row, col)
-        @board[row][col] = Queen.new if Queen.starting_range?(row, col)
-        @board[row][col] = King.new if King.starting_range?(row, col)
-        @board[row][col] = Pawn.new if Pawn.starting_range?(row, col)
+        @board[row][col] = Rook.new(:black) if Rook.starting_range_black?(row, col)
+        @board[row][col] = Rook.new(:white) if Rook.starting_range_white?(row, col)
+
+        @board[row][col] = Knight.new(:black) if Knight.starting_range_black?(row, col)
+        @board[row][col] = Knight.new(:white) if Knight.starting_range_white?(row, col)
+
+        @board[row][col] = Bishop.new(:black) if Bishop.starting_range_black?(row, col)
+        @board[row][col] = Bishop.new(:white) if Bishop.starting_range_white?(row, col)
+
+        @board[row][col] = Queen.new(:black) if Queen.starting_range_black?(row, col)
+        @board[row][col] = Queen.new(:white) if Queen.starting_range_white?(row, col)
+
+        @board[row][col] = King.new(:black) if King.starting_range_black?(row, col)
+        @board[row][col] = King.new(:white) if King.starting_range_white?(row, col)
+
+        @board[row][col] = Pawn.new(:black) if Pawn.starting_range_black?(row, col)
+        @board[row][col] = Pawn.new(:white) if Pawn.starting_range_white?(row, col)
       end
     end
   end
