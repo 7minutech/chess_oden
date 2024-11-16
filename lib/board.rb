@@ -1,4 +1,5 @@
 require "rainbow"
+Dir[File.join(__dir__, "pieces", "*.rb")].sort.each { |file| require file }
 
 class Board
   attr_accessor :board
@@ -29,5 +30,8 @@ class Board
     print Rainbow(" ").background(background)
     print Rainbow(square).background(background)
     print Rainbow(" ").background(background)
+  end
+
+  def fill_board
   end
 end
