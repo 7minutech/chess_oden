@@ -36,11 +36,8 @@ class Board
   def fill_board
     @board.each_index do |row|
       @board.each_index do |col|
-        @board[row][col] = Rook.new if Rook.starting_range.include?(row) && Rook.starting_range.include?(col)
-        if Knight.starting_range_row.include?(row) && Knight.starting_range_col.include?(col)
-          @board[row][col] =
-            Knight.new
-        end
+        @board[row][col] = Rook.new if Rook.starting_range?(row, col)
+        @board[row][col] = Knight.new if Knight.starting_range?(row, col)
       end
     end
   end
