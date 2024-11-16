@@ -13,7 +13,12 @@ class Board
   end
 
   def display_board
+    print "  "
+    (97..104).each { |num| print " #{num.chr} " }
+    count = 8
+    print "\n"
     @board.each_with_index do |row, row_index|
+      print "#{count} "
       row.each_with_index do |col, col_index|
         if (row_index + col_index).even?
           display_background(col, WHITE_BACKGROUND)
@@ -22,6 +27,7 @@ class Board
         end
       end
       print "\n"
+      count -= 1
     end
   end
 
