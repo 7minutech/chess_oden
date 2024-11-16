@@ -41,6 +41,7 @@ class Board
         @board[row][col] = Bishop.new if Bishop.starting_range?(row, col)
         @board[row][col] = Queen.new if Queen.starting_range?(row, col)
         @board[row][col] = King.new if King.starting_range?(row, col)
+        @board[row][col] = Pawn.new if Pawn.starting_range?(row, col)
       end
     end
   end
