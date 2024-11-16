@@ -38,6 +38,7 @@ class Board
       @board.each_index do |col|
         @board[row][col] = Rook.new if Rook.starting_range?(row, col)
         @board[row][col] = Knight.new if Knight.starting_range?(row, col)
+        @board[row][col] = Bishop.new if Bishop.starting_range?(row, col)
       end
     end
   end
