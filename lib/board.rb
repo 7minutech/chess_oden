@@ -1,3 +1,4 @@
+require "pry-byebug"
 require "rainbow"
 Dir[File.join(__dir__, "pieces", "*.rb")].sort.each { |file| require file }
 
@@ -33,5 +34,10 @@ class Board
   end
 
   def fill_board
+    @board.each_index do |row|
+      @board.each_index do |col|
+        @board[row][col] = Rook.new if Rook.starting_range.include?(row) && Rook.starting_range.include?(col)
+      end
+    end
   end
 end
