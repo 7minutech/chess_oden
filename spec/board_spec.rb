@@ -13,6 +13,14 @@ describe Board do
     it "prints chess board" do
       chess_board.send(:display_board)
     end
+    before do
+      chess_board.fill_board
+    end
+    context "when board is filled" do
+      it "displays pieces correctly" do
+        chess_board.display_board
+      end
+    end
   end
   describe "#fill_board" do
     before do
