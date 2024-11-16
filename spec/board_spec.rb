@@ -70,5 +70,16 @@ describe Board do
         expect(piece.color).to eq(expected_color)
       end
     end
+    it "sets the current squares" do
+      staring_rows = [0, 1, 6, 7]
+      chess_board.board.each_with_index do |row, row_index|
+        row.each_index do |col_index|
+          if staring_rows.include?(row_index)
+            piece = chess_board.board[row_index][col_index]
+            expect(piece.current_square).to eq([row_index, col_index])
+          end
+        end
+      end
+    end
   end
 end
