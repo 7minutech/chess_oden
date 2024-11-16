@@ -54,9 +54,9 @@ class Board
     return unless Rook.starting_range?(row, col)
 
     @board[row][col] = if Rook.starting_range_black?(row, col)
-                         Rook.new(:black)
+                         Rook.new(:black, [row, col])
                        else
-                         Rook.new(:white)
+                         Rook.new(:white, [row, col])
                        end
   end
 
@@ -64,9 +64,9 @@ class Board
     return unless Knight.starting_range?(row, col)
 
     @board[row][col] = if Knight.starting_range_black?(row, col)
-                         Knight.new(:black)
+                         Knight.new(:black, [row, col])
                        else
-                         Knight.new(:white)
+                         Knight.new(:white, [row, col])
                        end
   end
 
@@ -74,9 +74,9 @@ class Board
     return unless Bishop.starting_range?(row, col)
 
     @board[row][col] = if Bishop.starting_range_black?(row, col)
-                         Bishop.new(:black)
+                         Bishop.new(:black, [row, col])
                        else
-                         Bishop.new(:white)
+                         Bishop.new(:white, [row, col])
                        end
   end
 
@@ -84,9 +84,9 @@ class Board
     return unless Queen.starting_range?(row, col)
 
     @board[row][col] = if Queen.starting_range_black?(row, col)
-                         Queen.new(:black)
+                         Queen.new(:black, [row, col])
                        else
-                         Queen.new(:white)
+                         Queen.new(:white, [row, col])
                        end
   end
 
@@ -94,9 +94,9 @@ class Board
     return unless King.starting_range?(row, col)
 
     @board[row][col] = if King.starting_range_black?(row, col)
-                         King.new(:black)
+                         King.new(:black, [row, col])
                        else
-                         King.new(:white)
+                         King.new(:white, [row, col])
                        end
   end
 
@@ -104,9 +104,9 @@ class Board
     return unless Pawn.starting_range?(row, col)
 
     @board[row][col] = if Pawn.starting_range_black?(row, col)
-                         Pawn.new(:black)
+                         Pawn.new(:black, [row, col])
                        else
-                         Pawn.new(:white)
+                         Pawn.new(:white, [row, col])
                        end
   end
 end
