@@ -1,8 +1,10 @@
 class Rook
+  attr_writer :current_square
   attr_reader :color
 
   def initialize(color = nil)
     @color = color
+    @current_square = nil
   end
 
   def to_s

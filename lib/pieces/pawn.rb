@@ -3,6 +3,7 @@ class Pawn
 
   def initialize(color = nil)
     @color = color
+    @current_square = nil
   end
 
   def self.starting_range?(row, col)

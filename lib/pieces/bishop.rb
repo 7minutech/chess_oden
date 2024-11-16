@@ -3,6 +3,7 @@ class Bishop
 
   def initialize(color = nil)
     @color = color
+    @current_square = nil
   end
 
   def to_s
