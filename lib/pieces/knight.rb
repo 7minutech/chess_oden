@@ -1,4 +1,5 @@
 class Knight
+  attr_writer :current_square
   attr_reader :color
 
   def initialize(color = nil)
