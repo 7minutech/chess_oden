@@ -2,6 +2,7 @@ require "pry-byebug"
 require "rainbow"
 Dir[File.join(__dir__, "pieces", "*.rb")].sort.each { |file| require file }
 
+# Describes a chess board
 class Board
   attr_accessor :board
 
@@ -33,24 +34,73 @@ class Board
   def fill_board
     @board.each_index do |row|
       @board.each_index do |col|
-        @board[row][col] = Rook.new(:black) if Rook.starting_range_black?(row, col)
-        @board[row][col] = Rook.new(:white) if Rook.starting_range_white?(row, col)
-
-        @board[row][col] = Knight.new(:black) if Knight.starting_range_black?(row, col)
-        @board[row][col] = Knight.new(:white) if Knight.starting_range_white?(row, col)
-
-        @board[row][col] = Bishop.new(:black) if Bishop.starting_range_black?(row, col)
-        @board[row][col] = Bishop.new(:white) if Bishop.starting_range_white?(row, col)
-
-        @board[row][col] = Queen.new(:black) if Queen.starting_range_black?(row, col)
-        @board[row][col] = Queen.new(:white) if Queen.starting_range_white?(row, col)
-
-        @board[row][col] = King.new(:black) if King.starting_range_black?(row, col)
-        @board[row][col] = King.new(:white) if King.starting_range_white?(row, col)
-
-        @board[row][col] = Pawn.new(:black) if Pawn.starting_range_black?(row, col)
-        @board[row][col] = Pawn.new(:white) if Pawn.starting_range_white?(row, col)
+        place_starting_rooks(row, col)
+        place_starting_knights(row, col)
+        place_starting_bishops(row, col)
+        place_starting_queens(row, col)
+        place_starting_kings(row, col)
+        place_starting_pawns(row, col)
       end
     end
+  end
+
+  def place_starting_rooks(row, col)
+    return unless Rook.starting_range?(row, col)
+
+    @board[row][col] = if Rook.starting_range_black?(row, col)
+                         Rook.new(:black)
+                       else
+                         Rook.new(:white)
+                       end
+  end
+
+  def place_starting_knights(row, col)
+    return unless Knight.starting_range?(row, col)
+
+    @board[row][col] = if Knight.starting_range_black?(row, col)
+                         Knight.new(:black)
+                       else
+                         Knight.new(:white)
+                       end
+  end
+
+  def place_starting_bishops(row, col)
+    return unless Bishop.starting_range?(row, col)
+
+    @board[row][col] = if Bishop.starting_range_black?(row, col)
+                         Bishop.new(:black)
+                       else
+                         Bishop.new(:white)
+                       end
+  end
+
+  def place_starting_queens(row, col)
+    return unless Queen.starting_range?(row, col)
+
+    @board[row][col] = if Queen.starting_range_black?(row, col)
+                         Queen.new(:black)
+                       else
+                         Queen.new(:white)
+                       end
+  end
+
+  def place_starting_kings(row, col)
+    return unless King.starting_range?(row, col)
+
+    @board[row][col] = if King.starting_range_black?(row, col)
+                         King.new(:black)
+                       else
+                         King.new(:white)
+                       end
+  end
+
+  def place_starting_pawns(row, col)
+    return unless Pawn.starting_range?(row, col)
+
+    @board[row][col] = if Pawn.starting_range_black?(row, col)
+                         Pawn.new(:black)
+                       else
+                         Pawn.new(:white)
+                       end
   end
 end
