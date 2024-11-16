@@ -5,6 +5,14 @@ class Rook
     @color = color
   end
 
+  def to_s
+    if @color == :white
+      "\u2656"
+    else
+      "\u265C"
+    end
+  end
+
   def self.starting_range?(row, col)
     starting_rows = [0, 7]
     starting_cols = [0, 7]

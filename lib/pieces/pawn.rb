@@ -13,6 +13,14 @@ class Pawn
     false
   end
 
+  def to_s
+    if @color == :white
+      "\u2659"
+    else
+      "\u265F"
+    end
+  end
+
   def self.starting_range_black?(row, col)
     starting_rows = [1]
     starting_cols = (0..7)

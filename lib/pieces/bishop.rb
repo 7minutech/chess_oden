@@ -5,6 +5,14 @@ class Bishop
     @color = color
   end
 
+  def to_s
+    if @color == :white
+      "\u2657"
+    else
+      "\u265D"
+    end
+  end
+
   def self.starting_range?(row, col)
     starting_rows = [0, 7]
     starting_cols = [2, 5]

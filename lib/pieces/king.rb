@@ -5,6 +5,14 @@ class King
     @color = color
   end
 
+  def to_s
+    if @color == :white
+      "\u2654"
+    else
+      "\u265A"
+    end
+  end
+
   def self.starting_range?(row, col)
     starting_rows = [0, 7]
     starting_cols = [4]
