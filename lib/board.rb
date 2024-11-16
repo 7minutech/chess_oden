@@ -12,18 +12,15 @@ class Board
   end
 
   def display_board
-    count = 0
-    @board.each do |row|
-      row.each do |col|
-        if count.even?
+    @board.each_with_index do |row, row_index|
+      row.each_with_index do |col, col_index|
+        if (row_index + col_index).even?
           display_background(col, WHITE_BACKGROUND)
         else
           display_background(col, GREEN_BACKGROUND)
         end
-        count += 1
       end
       print "\n"
-      count += 1
     end
   end
 
