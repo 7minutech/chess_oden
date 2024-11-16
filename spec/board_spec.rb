@@ -41,5 +41,37 @@ describe Board do
         expect(chess_board.board[row][col]).to be_a(piece_class)
       end
     end
+    it "places black pieces correctly" do
+      expected_colors = {
+        # (row 0): Black pieces
+        [0, 0] => :black, [0, 1] => :black, [0, 2] => :black, [0, 3] => :black,
+        [0, 4] => :black, [0, 5] => :black, [0, 6] => :black, [0, 7] => :black,
+
+        # (row 1): Black pawns
+        [1, 0] => :black, [1, 1] => :black, [1, 2] => :black, [1, 3] => :black,
+        [1, 4] => :black, [1, 5] => :black, [1, 6] => :black, [1, 7] => :black
+      }
+
+      expected_colors.each do |(row, col), expected_color|
+        piece = chess_board.board[row][col]
+        expect(piece.color).to eq(expected_color)
+      end
+    end
+    it "places white pieces correctly" do
+      expected_colors = {
+        # (row 7): White pieces
+        [7, 0] => :white, [7, 1] => :white, [7, 2] => :white, [7, 3] => :white,
+        [7, 4] => :white, [7, 5] => :white, [7, 6] => :white, [7, 7] => :white,
+
+        # (row 6): White pawns
+        [6, 0] => :white, [6, 1] => :white, [6, 2] => :white, [6, 3] => :white,
+        [6, 4] => :white, [6, 5] => :white, [6, 6] => :white, [6, 7] => :white
+      }
+
+      expected_colors.each do |(row, col), expected_color|
+        piece = chess_board.board[row][col]
+        expect(piece.color).to eq(expected_color)
+      end
+    end
   end
 end
