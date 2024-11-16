@@ -6,8 +6,8 @@ Dir[File.join(__dir__, "pieces", "*.rb")].sort.each { |file| require file }
 class Board
   attr_accessor :board
 
-  WHITE_BACKGROUND = "ebecd0".freeze
-  GREEN_BACKGROUND = "739552".freeze
+  WHITE_BACKGROUND = "ffffff".freeze
+  GREEN_BACKGROUND = "6a9b41".freeze
   def initialize
     @board = Array.new(8) { Array.new(8) { " " } }
   end
