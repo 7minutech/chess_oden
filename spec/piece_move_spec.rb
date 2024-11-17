@@ -8,7 +8,7 @@ describe PieceMove do
       a2 = PieceMove.convert_chess_notation("a2")
       d4 = PieceMove.convert_chess_notation("d4")
       f6 = PieceMove.convert_chess_notation("f6")
-      expect(a2).to eq([6, 1])
+      expect(a2).to eq([6, 0])
       expect(d4).to eq([4, 3])
       expect(f6).to eq([2, 5])
     end
