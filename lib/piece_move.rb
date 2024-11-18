@@ -5,6 +5,7 @@ class PieceMove
 
   def initialize
     @board_obj = Board.new
+    @board = @board_obj.board
     @board_obj.fill_board
   end
 
@@ -18,5 +19,22 @@ class PieceMove
     rank = rank.abs
     file = file.ord % a_ascii
     [rank, file]
+  end
+
+  def pawn_moves
+    @board.each_with_index do |row, row_index|
+      row.each_with_index do |col, col_index|
+        piece = @board[row_index][col_index]
+        if piece.is_a?(Pawn)
+          if piece.color == :white
+            piece.possible_moves.push([row_index - 2, col_index]) if piece.current_square == piece.starting_square
+            piece.possible_moves.push([row_index - 1, col_index])
+          else
+            piece.possible_moves.push([row_index + 2, col_index]) if piece.current_square == piece.starting_square
+            piece.possible_moves.push([row_index + 1, col_index])
+          end
+        end
+      end
+    end
   end
 end
