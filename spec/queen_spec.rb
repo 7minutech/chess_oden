@@ -8,7 +8,7 @@ describe Queen do
         start_white_queen.create_possible_moves
         horizontal_moves = [[7, 0], [7, 1], [7, 2], [7, 4], [7, 5], [7, 6], [7, 7]]
         vertical_moves = [[6, 3], [5, 3], [4, 3], [3, 3], [2, 3], [1, 3], [0, 3]]
-        diagonal_moves = [[6, 2], [5, 1], [4, 0], [6, 4], [5, 5], [4, 4], [3, 7]]
+        diagonal_moves = [[6, 2], [5, 1], [4, 0], [6, 4], [5, 5], [4, 6], [3, 7]]
         expect(start_white_queen.possible_moves).to include(*horizontal_moves, *vertical_moves, *diagonal_moves)
       end
     end
@@ -19,7 +19,7 @@ describe Queen do
         horizontal_moves = [[0, 0], [0, 1], [0, 2], [0, 4], [0, 5], [0, 6], [0, 7]]
         vertical_moves = [[7, 3], [6, 3], [5, 3], [4, 3], [3, 3], [2, 3], [1, 3]]
         diagonal_moves = [[1, 2], [2, 1], [3, 0], [1, 4], [2, 5], [3, 6], [4, 7]]
-        expect(start_white_queen.possible_moves).to include(*horizontal_moves, *vertical_moves, *diagonal_moves)
+        expect(start_black_queen.possible_moves).to include(*horizontal_moves, *vertical_moves, *diagonal_moves)
       end
     end
   end
