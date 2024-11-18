@@ -17,6 +17,12 @@ class Pawn
     false
   end
 
+  def moved?
+    return true if @starting_square != @current_square
+
+    false
+  end
+
   def to_s
     if @color == :white
       "\u2659"
