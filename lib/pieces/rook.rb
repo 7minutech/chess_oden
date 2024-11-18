@@ -18,7 +18,6 @@ class Rook
 
   def create_possible_moves
     board_range = (0..7)
-    col_range = (0..7)
     current_row = @current_square[0]
     current_col = @current_square[1]
     board_range.each do |number|
