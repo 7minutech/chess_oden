@@ -23,6 +23,22 @@ class Pawn
     false
   end
 
+  def create_possible_moves
+    row = @current_square[0]
+    col = @current_square[1]
+    if @color == :white
+      @possible_moves.push([row - 2, col]) unless moved?
+      @possible_moves.push([row - 1, col])
+      @possible_moves.push([row - 1, col + 1])
+      @possible_moves.push([row - 1, col - 1])
+    else
+      @possible_moves.push([row + 2, col]) unless moved?
+      @possible_moves.push([row + 1, col])
+      @possible_moves.push([row + 1, col + 1])
+      @possible_moves.push([row + 1, col - 1])
+    end
+  end
+
   def to_s
     if @color == :white
       "\u2659"
