@@ -1,5 +1,6 @@
 class Pawn
   attr_accessor :color, :current_square, :possible_moves
+  attr_reader :starting_square
 
   def initialize(color = nil, current_square = nil)
     @color = color
