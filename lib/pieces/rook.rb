@@ -1,10 +1,11 @@
 class Rook
-  attr_accessor :color, :current_square
+  attr_accessor :color, :current_square, :possible_moves
 
   def initialize(color = nil, current_square = nil)
     @color = color
     @current_square = current_square
     @starting_square = current_square
+    @possible_moves = []
   end
 
   def to_s
@@ -12,6 +13,17 @@ class Rook
       "\u2656"
     else
       "\u265C"
+    end
+  end
+
+  def create_possible_moves
+    board_range = (0..7)
+    col_range = (0..7)
+    current_row = @current_square[0]
+    current_col = @current_square[1]
+    board_range.each do |number|
+      @possible_moves.push([number, current_col]) unless current_row == number
+      @possible_moves.push([current_row, number]) unless current_col == number
     end
   end
 
