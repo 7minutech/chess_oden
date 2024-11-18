@@ -1,9 +1,10 @@
 class Queen
-  attr_accessor :color, :current_square
+  attr_accessor :color, :current_square, :possible_moves
 
   def initialize(color = nil, current_square = nil)
     @color = color
     @current_square = current_square
+    @possible_moves = []
   end
 
   def to_s
@@ -11,6 +12,58 @@ class Queen
       "\u2655"
     else
       "\u265B"
+    end
+  end
+
+  def create_possible_moves
+    board_range = (0..7)
+    current_row = @current_square[0]
+    current_col = @current_square[1]
+    create_possible_horizontal(current_row, current_col, board_range)
+    create_possible_vertical(current_row, current_col, board_range)
+    create_possible_diagonal(current_row, current_col, board_range)
+  end
+
+  def create_possible_horizontal(current_row, current_col, board_range)
+    board_range.each do |number|
+      @possible_moves.push([number, current_col]) unless current_row == number
+    end
+  end
+
+  def create_possible_vertical(current_row, current_col, board_range)
+    board_range.each do |number|
+      @possible_moves.push([current_row, number]) unless current_col == number
+    end
+  end
+
+  def create_possible_diagonal(current_row, current_col, board_range)
+    create_diagonal_down_left(current_row, current_col, board_range)
+    create_diagonal_down_right(current_row, current_col, board_range)
+    create_diagonal_up_left(current_row, current_col, board_range)
+    create_diagonal_up_right(current_row, current_col, board_range)
+  end
+
+  def create_diagonal_down_right(current_row, current_col, board_range)
+    while board_range.include?(current_row) && board_range.include?(current_col)
+      @possible_moves.push([current_row += 1, current_col += 1])
+    end
+  end
+
+  def create_diagonal_down_left(current_row, current_col, board_range)
+    while board_range.include?(current_row) && board_range.include?(current_col)
+      @possible_moves.push([current_row += 1, current_col -= 1])
+    end
+  end
+
+  def create_diagonal_up_right(current_row, current_col, board_range)
+    while board_range.include?(current_row) && board_range.include?(current_col)
+      @possible_moves.push([current_row -= 1, current_col += 1])
+    end
+  end
+
+  def create_diagonal_up_left(current_row, current_col, board_range)
+    while board_range.include?(current_row) && board_range.include?(current_col)
+      @possible_moves.push([current_row -= 1, current_col -= 1])
     end
   end
 
