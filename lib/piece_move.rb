@@ -36,11 +36,8 @@ class PieceMove
         next
       end
       if (move[0] - row).abs == 2 && square != (" ")
-        if piece.color == :white
-          piece.possible_moves.delete([move[0] - 2, move[1]])
-        else
-          piece.possible_moves.delete([move[0] + 2, move[1]])
-        end
+        piece.possible_moves.delete([move[0], move[1]])
+
         next
       end
       next unless move[0] != row && move[1] != col
