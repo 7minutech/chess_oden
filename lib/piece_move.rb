@@ -1,4 +1,5 @@
 require_relative "board"
+require "pry-byebug"
 
 class PieceMove
   attr_reader :board_obj
@@ -21,20 +22,30 @@ class PieceMove
     [rank, file]
   end
 
-  def pawn_moves
-    @board.each_with_index do |row, row_index|
-      row.each_with_index do |col, col_index|
-        piece = @board[row_index][col_index]
-        if piece.is_a?(Pawn)
-          if piece.color == :white
-            piece.possible_moves.push([row_index - 2, col_index]) if piece.current_square == piece.starting_square
-            piece.possible_moves.push([row_index - 1, col_index])
-          else
-            piece.possible_moves.push([row_index + 2, col_index]) if piece.current_square == piece.starting_square
-            piece.possible_moves.push([row_index + 1, col_index])
-          end
+  def remove_impossible_pawn_moves(row, col)
+    piece = @board[row][col]
+    piece.possible_moves.dup.each do |move|
+      square = @board[move[0]][move[1]]
+      if (move[0] - row).abs == 1 && move[1] == col && square != (" ")
+        piece.possible_moves.delete([move[0], move[1]])
+        if piece.color == :white
+          piece.possible_moves.delete([move[0] - 1, move[1]])
+        else
+          piece.possible_moves.delete([move[0] + 1, move[1]])
         end
+        next
       end
+      if (move[0] - row).abs == 2 && square != (" ")
+        if piece.color == :white
+          piece.possible_moves.delete([move[0] - 2, move[1]])
+        else
+          piece.possible_moves.delete([move[0] + 2, move[1]])
+        end
+        next
+      end
+      next unless move[0] != row && move[1] != col
+
+      piece.possible_moves.delete([move[0], move[1]]) unless square != " " && square.color != piece.color
     end
   end
 end
