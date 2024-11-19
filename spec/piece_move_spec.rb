@@ -87,4 +87,23 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#remove_impossible_bishop_moves" do
+    context "at the start of the game" do
+      let(:piece_move) { described_class.new }
+      let(:board) { piece_move.board }
+      xit "removes impossible moves for white light squared bishop" do
+        white_light_squared_bishop = board[][]
+      end
+      xit "removes impossible moves for white dark squared bishop" do
+        white_dark_squared_bishop = board[][]
+      end
+      xit "removes impossible moves for black light squared bishop" do
+        black_light_squared_bishop = board[][]
+      end
+      xit "removes impossible moves for black dark squared bishop" do
+        black_dark_squared_bishop = board[][]
+      end
+    end
+  end
 end
