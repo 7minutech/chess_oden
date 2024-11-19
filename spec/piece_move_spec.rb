@@ -4,7 +4,7 @@ require "pry-byebug"
 describe PieceMove do
   let(:piece_move) { described_class.new }
   describe "#convert_chess_notation" do
-    xit "takes a chess notation and converts xit to an corresponding array" do
+    it "takes a chess notation and converts it to an corresponding array" do
       a2 = PieceMove.convert_chess_notation("a2")
       d4 = PieceMove.convert_chess_notation("d4")
       f6 = PieceMove.convert_chess_notation("f6")
@@ -15,14 +15,14 @@ describe PieceMove do
   end
   describe "#remove_impossible_pawn_moves" do
     context "at the start of the game" do
-      xit "removes impossible moves for pawns for white" do
+      it "removes impossible moves for pawns for white" do
         board = piece_move.board_obj.board
         e2 = board[6][4]
         e2.create_possible_moves
         piece_move.remove_impossible_pawn_moves(6, 4)
         expect(e2.possible_moves).to contain_exactly([5, 4], [4, 4])
       end
-      xit "removes impossible moves for pawns for black" do
+      it "removes impossible moves for pawns for black" do
         board = piece_move.board_obj.board
         e7 = board[1][4]
         e7.create_possible_moves
@@ -51,7 +51,7 @@ describe PieceMove do
       end
     end
     context "when a piece is blocking its path one square up" do
-      xit "removes impossible moves for white pawns" do
+      it "removes impossible moves for white pawns" do
         board = piece_move.board_obj.board
         board[5][4] = Pawn.new
         e2 = board[6][4]
@@ -59,7 +59,7 @@ describe PieceMove do
         piece_move.remove_impossible_pawn_moves(6, 4)
         expect(e2.possible_moves).to be_empty
       end
-      xit "removes impossible moves for black pawns" do
+      it "removes impossible moves for black pawns" do
         board = piece_move.board_obj.board
         board[2][4] = Pawn.new
         e7 = board[1][4]
@@ -69,7 +69,7 @@ describe PieceMove do
       end
     end
     context "when a piece is blocking its path two squares up" do
-      xit "removes impossible moves for white pawns" do
+      it "removes impossible moves for white pawns" do
         board = piece_move.board_obj.board
         board[4][4] = Pawn.new
         e2 = board[6][4]
@@ -77,7 +77,7 @@ describe PieceMove do
         piece_move.remove_impossible_pawn_moves(6, 4)
         expect(e2.possible_moves).to contain_exactly([5, 4])
       end
-      xit "removes impossible moves for black pawns" do
+      it "removes impossible moves for black pawns" do
         board = piece_move.board_obj.board
         board[3][4] = Pawn.new
         e7 = board[1][4]
