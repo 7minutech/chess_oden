@@ -17,8 +17,9 @@ describe PieceMove do
     context "at the start of the game" do
       it "removes impossible moves for pawns" do
         board = piece_move.board_obj.board
-        piece_move.pawn_moves
         e2 = board[6][4]
+        e2.create_possible_moves
+        piece_move.remove_impossible_pawn_moves(6, 4)
         expect(e2.possible_moves).to contain_exactly([5, 4], [4, 4])
       end
     end
