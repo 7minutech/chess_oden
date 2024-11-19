@@ -13,19 +13,13 @@ describe PieceMove do
       expect(f6).to eq([2, 5])
     end
   end
-  describe "#pawn_moves" do
+  describe "#remove_impossible_pawn_moves" do
     context "at the start of the game" do
-      it "sets the correct possibles for pawns" do
+      it "removes impossible moves for pawns" do
         board = piece_move.board_obj.board
         piece_move.pawn_moves
-        a2 = board[6][0]
-        a7 = board[1][0]
-        b2 = board[6][1]
-        b7 = board[1][1]
-        expect(a2.possible_moves).to include([5, 0], [4, 0])
-        expect(a7.possible_moves).to include([2, 0], [3, 0])
-        expect(b2.possible_moves).to include([5, 1], [4, 1])
-        expect(b7.possible_moves).to include([2, 1], [3, 1])
+        e2 = board[6][4]
+        expect(e2.possible_moves).to contain_exactly([5, 4], [4, 4])
       end
     end
   end
