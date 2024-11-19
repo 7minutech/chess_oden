@@ -14,8 +14,8 @@ describe Knight do
   describe "#create_up_moves" do
     context "when knight is in the middle of the board" do
       subject(:d4_white_knight) { described_class.new(:white, [4, 3]) }
-      it "creates list of possible moves" do
-        d4_white_knight.create_up_moves
+      it "creates list of possible moves going up" do
+        d4_white_knight.create_up_moves(4, 3)
         expect(d4_white_knight.possible_moves).to include([2, 2], [2, 4])
       end
     end
@@ -23,8 +23,8 @@ describe Knight do
   describe "#create_down_moves" do
     context "when knight is in the middle of the board" do
       subject(:d4_white_knight) { described_class.new(:white, [4, 3]) }
-      it "creates list of possible moves" do
-        d4_white_knight.create_down_moves
+      it "creates list of possible moves going down" do
+        d4_white_knight.create_down_moves(4, 3)
         expect(d4_white_knight.possible_moves).to include([6, 2], [6, 4])
       end
     end
@@ -32,8 +32,8 @@ describe Knight do
   describe "#create_left_moves" do
     context "when knight is in the middle of the board" do
       subject(:d4_white_knight) { described_class.new(:white, [4, 3]) }
-      it "creates list of possible moves" do
-        d4_white_knight.create_up_moves
+      it "creates list of possible moves going left" do
+        d4_white_knight.create_up_moves(4, 3)
         expect(d4_white_knight.possible_moves).to include([3, 1], [5, 1])
       end
     end
@@ -41,8 +41,8 @@ describe Knight do
   describe "#create_up_moves" do
     context "when knight is in the middle of the board" do
       subject(:d4_white_knight) { described_class.new(:white, [4, 3]) }
-      it "creates list of possible moves" do
-        d4_white_knight.create_up_moves
+      it "creates list of possible moves going right" do
+        d4_white_knight.create_up_moves(4, 3)
         expect(d4_white_knight.possible_moves).to include([3, 5], [5, 5])
       end
     end
