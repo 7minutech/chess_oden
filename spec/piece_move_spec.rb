@@ -151,5 +151,39 @@ describe PieceMove do
         expect(bishop.possible_moves).to contain_exactly([3, 0], [3, 2], [4, 3])
       end
     end
+    context "white bishop is blocked by its friendly pieces" do
+      it "removes all moves" do
+        bishop = Bishop.new(:white, [4, 4])
+        white_pawn_d3 = Pawn.new(:white, [5, 3])
+        white_pawn_f3 = Pawn.new(:white, [5, 5])
+        white_pawn_d5 = Pawn.new(:white, [3, 3])
+        white_pawn_f5 = Pawn.new(:white, [3, 5])
+        board[5][3] = white_pawn_d3
+        board[3][5] = white_pawn_f5
+        board[3][3] = white_pawn_d5
+        board[5][5] = white_pawn_f3
+        board[4][4] = bishop
+        bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(4, 4)
+        expect(bishop.possible_moves).to be_empty
+      end
+    end
+    context "black bishop is blocked by its friendly pieces" do
+      it "removes all moves" do
+        bishop = Bishop.new(:black, [3, 4])
+        white_pawn_d6 = Pawn.new(:black, [2, 3])
+        white_pawn_f6 = Pawn.new(:black, [2, 5])
+        white_pawn_d5 = Pawn.new(:black, [4, 3])
+        white_pawn_f5 = Pawn.new(:black, [4, 5])
+        board[2][3] = white_pawn_d6
+        board[4][5] = white_pawn_f5
+        board[4][3] = white_pawn_d5
+        board[2][5] = white_pawn_f6
+        board[3][4] = bishop
+        bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(3, 4)
+        expect(bishop.possible_moves).to be_empty
+      end
+    end
   end
 end
