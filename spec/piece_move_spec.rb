@@ -288,4 +288,40 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#remove_impossible_knight_moves" do
+    let(:board) { piece_move.board }
+    context "when b1 knight is a start" do
+      it "removes impossible moves" do
+        knight_b1 = board[7][1]
+        knight_b1.create_possible_moves
+        piece_move.remove_impossible_knight_moves(7, 1)
+        expect(knight_b1.possible_moves).to contain_exactly([5, 0], [5, 2])
+      end
+    end
+    context "when g1 knight is a start" do
+      it "removes impossible moves" do
+        knight_g1 = board[7][6]
+        knight_g1.create_possible_moves
+        piece_move.remove_impossible_knight_moves(7, 6)
+        expect(knight_g1.possible_moves).to contain_exactly([5, 5], [5, 7])
+      end
+    end
+    context "when b8 knight is a start" do
+      it "removes impossible moves" do
+        knight_b8 = board[0][1]
+        knight_b8.create_possible_moves
+        piece_move.remove_impossible_knight_moves(0, 1)
+        expect(knight_b8.possible_moves).to contain_exactly([2, 0], [2, 2])
+      end
+    end
+    context "when g8 knight is a start" do
+      it "removes impossible moves" do
+        knight_g8 = board[0][6]
+        knight_g8.create_possible_moves
+        piece_move.remove_impossible_knight_moves(0, 6)
+        expect(knight_g8.possible_moves).to contain_exactly([2, 5], [2, 7])
+      end
+    end
+  end
 end
