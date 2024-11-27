@@ -323,5 +323,23 @@ describe PieceMove do
         expect(knight_g8.possible_moves).to contain_exactly([2, 5], [2, 7])
       end
     end
+    context "knight is center of board" do
+      it "removes impossible moves" do
+        knight_d4 = Knight.new(:white, [4, 3])
+        knight_d4.create_possible_moves
+        board[4][3] = knight_d4
+        piece_move.remove_impossible_knight_moves(4, 3)
+        expect(knight_d4.possible_moves).to contain_exactly([2, 2], [2, 4], [3, 1], [3, 5], [5, 1], [5, 5])
+      end
+    end
+    context "knight can attack" do
+      it "removes impossible moves and keeps attacking moves" do
+        knight_g3 = Knight.new(:black, [5, 6])
+        knight_g3.create_possible_moves
+        board[5][6] = knight_g3
+        piece_move.remove_impossible_knight_moves(5, 6)
+        expect(knight_g3.possible_moves).to contain_exactly([7, 5], [7, 7], [6, 4], [4, 4], [3, 5], [3, 7])
+      end
+    end
   end
 end
