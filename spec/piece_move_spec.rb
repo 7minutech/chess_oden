@@ -254,4 +254,24 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#remove_impossible_queen_moves" do
+    let(:board) { piece_move.board }
+    context "At the start of the game" do
+      it "removes white queen's impossible moves" do
+        white_queen = board[7][3]
+        white_queen.create_possible_moves
+        piece_move.remove_impossible_queen_moves(7, 3)
+        expect(white_queen.possible_moves).to be_empty
+      end
+    end
+    context "At the start of the game" do
+      it "removes black queen's impossible moves" do
+        black_queen = board[0][3]
+        black_queen.create_possible_moves
+        piece_move.remove_impossible_queen_moves(0, 3)
+        expect(black_queen.possible_moves).to be_empty
+      end
+    end
+  end
 end
