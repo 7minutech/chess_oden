@@ -89,20 +89,27 @@ describe PieceMove do
   end
 
   describe "#remove_impossible_bishop_moves" do
+    let(:board) { piece_move.board }
     context "at the start of the game" do
-      let(:piece_move) { described_class.new }
-      let(:board) { piece_move.board }
-      xit "removes impossible moves for white light squared bishop" do
-        white_light_squared_bishop = board[][]
+      it "removes impossible moves for white light squared bishop" do
+        white_light_squared_bishop = board[7][5]
+        piece_move.remove_impossible_bishop_moves(7, 5)
+        expect(white_light_squared_bishop.possible_moves).to be_empty
       end
-      xit "removes impossible moves for white dark squared bishop" do
-        white_dark_squared_bishop = board[][]
+      it "removes impossible moves for white dark squared bishop" do
+        white_dark_squared_bishop = board[7][2]
+        piece_move.remove_impossible_bishop_moves(7, 2)
+        expect(white_dark_squared_bishop.possible_moves).to be_empty
       end
-      xit "removes impossible moves for black light squared bishop" do
-        black_light_squared_bishop = board[][]
+      it "removes impossible moves for black light squared bishop" do
+        black_light_squared_bishop = board[0][5]
+        piece_move.remove_impossible_bishop_moves(0, 5)
+        expect(black_light_squared_bishop.possible_moves).to be_empty
       end
-      xit "removes impossible moves for black dark squared bishop" do
-        black_dark_squared_bishop = board[][]
+      it "removes impossible moves for black dark squared bishop" do
+        black_dark_squared_bishop = board[0][2]
+        piece_move.remove_impossible_bishop_moves(0, 2)
+        expect(black_dark_squared_bishop.possible_moves).to be_empty
       end
     end
   end
