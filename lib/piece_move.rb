@@ -47,49 +47,57 @@ class PieceMove
 
   def remove_impossible_bishop_moves(row, col)
     piece = @board[row][col]
-    temp_row = row
-    temp_col = col
-    while (temp_row - 1).between?(0, 7) && (temp_col - 1).between?(0, 7) && @board[temp_row - 1][temp_col - 1] == " "
-      temp_row -= 1
-      temp_col -= 1
+    remove_diagonal_up_left(row, col, piece)
+    remove_diagonal_up_right(row, col, piece)
+    remove_diagonal_down_left(row, col, piece)
+    remove_diagonal_down_right(row, col, piece)
+  end
+
+  def remove_diagonal_up_left(row, col, piece)
+    while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
+      row -= 1
+      col -= 1
     end
-    while (temp_row - 1).between?(0, 7) && (temp_col - 1).between?(0, 7)
-      temp_row -= 1
-      temp_col -= 1
-      piece.possible_moves.delete([temp_row, temp_col])
+    while (row - 1).between?(0, 7) && (col - 1).between?(0, 7)
+      row -= 1
+      col -= 1
+      piece.possible_moves.delete([row, col])
     end
-    temp_row = row
-    temp_col = col
-    while (temp_row - 1).between?(0, 7) && (temp_col + 1).between?(0, 7) && @board[temp_row - 1][temp_col + 1] == " "
-      temp_row -= 1
-      temp_col += 1
+  end
+
+  def remove_diagonal_up_right(row, col, piece)
+    while (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && @board[row - 1][col + 1] == " "
+      row -= 1
+      col += 1
     end
-    while (temp_row - 1).between?(0, 7) && (temp_col + 1).between?(0, 7)
-      temp_row -= 1
-      temp_col += 1
-      piece.possible_moves.delete([temp_row, temp_col])
+    while (row - 1).between?(0, 7) && (col + 1).between?(0, 7)
+      row -= 1
+      col += 1
+      piece.possible_moves.delete([row, col])
     end
-    temp_row = row
-    temp_col = col
-    while (temp_row + 1).between?(0, 7) && (temp_col - 1).between?(0, 7) && @board[temp_row + 1][temp_col - 1] == " "
-      temp_row += 1
-      temp_col -= 1
+  end
+
+  def remove_diagonal_down_left(row, col, piece)
+    while (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row + 1][col - 1] == " "
+      row += 1
+      col -= 1
     end
-    while (temp_row + 1).between?(0, 7) && (temp_col - 1).between?(0, 7)
-      temp_row += 1
-      temp_col -= 1
-      piece.possible_moves.delete([temp_row, temp_col])
+    while (row + 1).between?(0, 7) && (col - 1).between?(0, 7)
+      row += 1
+      col -= 1
+      piece.possible_moves.delete([row, col])
     end
-    temp_row = row
-    temp_col = col
-    while (temp_row + 1).between?(0, 7) && (temp_col + 1).between?(0, 7) && @board[temp_row + 1][temp_col + 1] == " "
-      temp_row += 1
-      temp_col += 1
+  end
+
+  def remove_diagonal_down_right(row, col, piece)
+    while (row + 1).between?(0, 7) && (col + 1).between?(0, 7) && @board[row + 1][col + 1] == " "
+      row += 1
+      col += 1
     end
-    while (temp_row + 1).between?(0, 7) && (temp_col + 1).between?(0, 7)
-      temp_row += 1
-      temp_col += 1
-      piece.possible_moves.delete([temp_row, temp_col])
+    while (row + 1).between?(0, 7) && (col + 1).between?(0, 7)
+      row += 1
+      col += 1
+      piece.possible_moves.delete([row, col])
     end
   end
 end
