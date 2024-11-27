@@ -129,5 +129,27 @@ describe PieceMove do
         expect(bishop.possible_moves).to contain_exactly([5, 4], [5, 2], [3, 4], [3, 2], [2, 1], [2, 5])
       end
     end
+    context "when the white bishop can attack a piece" do
+      it "removes impossible moves and keeps move to attack" do
+        bishop = Bishop.new(:white, [5, 3])
+        black_pawn = Pawn.new(:black, [3, 5])
+        board[5][3] = bishop
+        board[3][5] = black_pawn
+        bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(5, 3)
+        expect(bishop.possible_moves).to contain_exactly([4, 2], [4, 4], [3, 1], [3, 5], [2, 0], [2, 5])
+      end
+    end
+    context "when the black bishop can attack a piece" do
+      it "removes impossible moves and keeps move to attack" do
+        bishop = Bishop.new(:white, [2, 1])
+        white_pawn = Pawn.new(:black, [4, 3])
+        board[2][1] = bishop
+        board[4][3] = white_pawn
+        bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(2, 1)
+        expect(bishop.possible_moves).to contain_exactly([3, 0], [3, 2], [4, 3])
+      end
+    end
   end
 end
