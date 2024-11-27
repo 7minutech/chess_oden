@@ -361,5 +361,18 @@ describe PieceMove do
         expect(black_king.possible_moves).to be_empty
       end
     end
+    context "when a king has move that put him in check" do
+      it "removes impossible moves" do
+        white_king = King.new(:white, [4, 3])
+        black_rook_c6 = Rook.new(:black, [3, 2])
+        board[4][3] = white_king
+        board[3][2] = black_rook_c6
+        piece_move.board_obj.display_board
+        piece_move.create_moves
+        piece_move.remove_impossible_non_king_moves
+        piece_move.remove_impossible_king_moves(4, 3)
+        expect(white_king.possible_moves).to contain_exactly([3, 2], [5, 3], [5, 4], [4, 4])
+      end
+    end
   end
 end
