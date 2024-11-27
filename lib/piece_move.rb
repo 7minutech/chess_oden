@@ -2,7 +2,7 @@ require_relative "board"
 require "pry-byebug"
 
 class PieceMove
-  attr_reader :board_obj
+  attr_reader :board_obj, :board
 
   def initialize
     @board_obj = Board.new
@@ -37,7 +37,6 @@ class PieceMove
       end
       if (move[0] - row).abs == 2 && square != (" ")
         piece.possible_moves.delete([move[0], move[1]])
-
         next
       end
       next unless move[0] != row && move[1] != col
