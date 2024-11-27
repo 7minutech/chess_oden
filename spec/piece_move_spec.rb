@@ -102,18 +102,21 @@ describe PieceMove do
         white_dark_squared_bishop = Bishop.new(:white, [7, 2])
         board[7][2] = white_dark_squared_bishop
         white_dark_squared_bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(7, 2)
         expect(white_dark_squared_bishop.possible_moves).to be_empty
       end
       it "removes impossible moves for black light squared bishop" do
         black_light_squared_bishop = Bishop.new(:black, [0, 5])
         board[0][5] = black_light_squared_bishop
         black_light_squared_bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(0, 5)
         expect(black_light_squared_bishop.possible_moves).to be_empty
       end
       it "removes impossible moves for black dark squared bishop" do
         black_dark_squared_bishop = Bishop.new(:black, [0, 2])
         board[0][2] = black_dark_squared_bishop
         black_dark_squared_bishop.create_possible_moves
+        piece_move.remove_impossible_bishop_moves(0, 2)
         expect(black_dark_squared_bishop.possible_moves).to be_empty
       end
     end
