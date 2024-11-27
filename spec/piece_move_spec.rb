@@ -112,5 +112,13 @@ describe PieceMove do
         expect(black_dark_squared_bishop.possible_moves).to be_empty
       end
     end
+    context "when the bishop is at the center" do
+      it "removes the impossible moves for bishop" do
+        bishop = Bishop.new(:white, [4, 3])
+        board[4][3] = bishop
+        piece_move.remove_impossible_bishop_moves(4, 3)
+        expect(bishop.possible_moves).to contain_exactly([5, 4], [5, 2], [3, 4], [3, 2], [2, 3], [2, 5])
+      end
+    end
   end
 end
