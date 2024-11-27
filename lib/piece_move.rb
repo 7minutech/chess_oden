@@ -74,6 +74,15 @@ class PieceMove
     end
   end
 
+  def create_moves
+    (0..7).each do |row|
+      (0..7).each do |col|
+        piece_on_square = board[row][col]
+        piece_on_square.create_possible_moves if piece_on_square != " "
+      end
+    end
+  end
+
   def remove_diagonal_up_left(row, col, piece)
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
       row -= 1
