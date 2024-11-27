@@ -118,4 +118,72 @@ class PieceMove
       piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " " && !blocked
     end
   end
+
+  def remove_impossible_rook_moves(row, col)
+    piece = @board[row][col]
+    remove_straight_up(row, col, piece)
+    remove_straight_right(row, col, piece)
+    remove_straight_down(row, col, piece)
+    remove_straight_left(row, col, piece)
+  end
+
+  def remove_straight_up(row, col, piece)
+    row -= 1 while (row - 1).between?(0, 7) && board[row - 1][col] == " "
+    if board[row][col] == " " || !(row - 1).between?(0, 7)
+      nil
+    elsif board[row - 1][col].color == piece.color
+      while (row - 1).between?(0, 7)
+        piece.possible_moves.delete([row - 1, col])
+        row -= 1
+      end
+    else
+      row -= 1
+      piece.possible_moves.delete([row - 1, col]) while (row - 1).between?(0, 7)
+    end
+  end
+
+  def remove_straight_right(row, col, piece)
+    col += 1 while (col + 1).between?(0, 7) && board[row][col + 1] == " "
+    if board[row][col] == " " || !(col + 1).between?(0, 7)
+      nil
+    elsif board[row][col + 1].color == piece.color
+      while (col + 1).between?(0, 7)
+        piece.possible_moves.delete([row, col + 1])
+        col += 1
+      end
+    else
+      col += 1
+      piece.possible_moves.delete([row, col + 1]) while (col + 1).between?(0, 7)
+    end
+  end
+
+  def remove_straight_down(row, col, piece)
+    row += 1 while (row + 1).between?(0, 7) && board[row + 1][col] == " "
+    if board[row][col] == " " || !(row + 1).between?(0, 7)
+      nil
+    elsif board[row + 1][col].color == piece.color
+      while (row + 1).between?(0, 7)
+        piece.possible_moves.delete([row + 1, col])
+        row += 1
+      end
+    else
+      row += 1
+      piece.possible_moves.delete([row + 1, col]) while (row + 1).between?(0, 7)
+    end
+  end
+
+  def remove_straight_left(row, col, piece)
+    col -= 1 while (col - 1).between?(0, 7) && board[row][col - 1] == " "
+    if board[row][col] == " " || !(col - 1).between?(0, 7)
+      nil
+    elsif board[row][col - 1].color == piece.color
+      while (col - 1).between?(0, 7)
+        piece.possible_moves.delete([row, col - 1])
+        col -= 1
+      end
+    else
+      col -= 1
+      piece.possible_moves.delete([row, col - 1]) while (col - 1).between?(0, 7)
+    end
+  end
 end
