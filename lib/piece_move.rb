@@ -74,6 +74,33 @@ class PieceMove
     end
   end
 
+  def remove_impossible_king_moves(row, col)
+    piece = board[row][col]
+    enemy_moves = []
+    (0..7).each do |board_row|
+      (0..7).each do |board_col|
+        piece_on_square = board[board_row][board_col]
+        next unless piece_on_square != " " && piece_on_square.color != piece.color
+
+        piece_on_square.possible_moves.each do |move|
+          if piece_on_square.is_a?(Pawn)
+            enemy_moves.push(move) if piece_on_square.attacking_moves.include?(move)
+          else
+            enemy_moves.push(move)
+          end
+        end
+      end
+    end
+    enemy_moves = enemy_moves.uniq
+    piece.possible_moves.dup.each do |move|
+      # binding.pry
+      piece.possible_moves.delete(move) if enemy_moves.include?(move)
+      if board[move[0]][move[1]] != " " && board[move[0]][move[1]].color == piece.color
+        piece.possible_moves.delete(move)
+      end
+    end
+  end
+
   def create_moves
     (0..7).each do |row|
       (0..7).each do |col|
@@ -92,11 +119,11 @@ class PieceMove
         piece_on_square = board[row][col]
         next unless piece_on_square != " " && !piece_on_square.is_a?(King)
 
-        piece_on_square.remove_impossible_bishop_moves if piece_on_square.is_a?(Bishop)
-        piece_on_square.remove_impossible_knight_moves if piece_on_square.is_a?(Knight)
-        piece_on_square.remove_impossible_pawn_moves if piece_on_square.is_a?(Pawn)
-        piece_on_square.remove_impossible_queen_moves if piece_on_square.is_a?(Queen)
-        piece_on_square.remove_impossible_rook_moves if piece_on_square.is_a?(Rook)
+        remove_impossible_bishop_moves(row, col) if piece_on_square.is_a?(Bishop)
+        remove_impossible_knight_moves(row, col) if piece_on_square.is_a?(Knight)
+        remove_impossible_pawn_moves(row, col) if piece_on_square.is_a?(Pawn)
+        remove_impossible_queen_moves(row, col) if piece_on_square.is_a?(Queen)
+        remove_impossible_rook_moves(row, col) if piece_on_square.is_a?(Rook)
       end
     end
   end
