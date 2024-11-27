@@ -8,10 +8,10 @@ describe Bishop do
       it "creates list of possible moves" do
         start_white_light_bishop.create_possible_moves
         start_white_dark_bishop.create_possible_moves
-        expect(start_white_light_bishop.possible_moves).to include([6, 4], [5, 3], [4, 2], [3, 1], [2, 0],
-                                                                   [6, 6], [5, 7])
-        expect(start_white_dark_bishop.possible_moves).to include([6, 1], [5, 0],
-                                                                  [6, 3], [5, 4], [4, 5], [3, 6], [2, 7])
+        expect(start_white_light_bishop.possible_moves).to contain_exactly([6, 4], [5, 3], [4, 2], [3, 1], [2, 0],
+                                                                           [6, 6], [5, 7])
+        expect(start_white_dark_bishop.possible_moves).to contain_exactly([6, 1], [5, 0],
+                                                                          [6, 3], [5, 4], [4, 5], [3, 6], [2, 7])
       end
     end
   end
