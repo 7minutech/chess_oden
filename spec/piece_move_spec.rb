@@ -198,23 +198,35 @@ describe PieceMove do
 
   describe "#remove_impossible_rook_moves" do
     let(:board) { piece_move.board }
-    context "at the start game" do
+    context "start of game for a1" do
       it "removes impossible moves for rooks" do
         rook_a1 = board[7][0]
-        rook_h1 = board[7][7]
-        rook_a8 = board[0][0]
-        rook_h8 = board[0][7]
         rook_a1.create_possible_moves
-        rook_h1.create_possible_moves
-        rook_a8.create_possible_moves
-        rook_h8.create_possible_moves
         piece_move.remove_impossible_rook_moves(7, 0)
-        piece_move.remove_impossible_rook_moves(7, 7)
-        piece_move.remove_impossible_rook_moves(0, 0)
-        piece_move.remove_impossible_rook_moves(0, 0)
         expect(rook_a1.possible_moves).to be_empty
+      end
+    end
+    context "start of game for h1" do
+      it "removes impossible moves for rooks" do
+        rook_h1 = board[7][7]
+        rook_h1.create_possible_moves
+        piece_move.remove_impossible_rook_moves(7, 7)
         expect(rook_h1.possible_moves).to be_empty
+      end
+    end
+    context "start of game for a8" do
+      it "removes impossible moves for rooks" do
+        rook_a8 = board[0][0]
+        rook_a8.create_possible_moves
+        piece_move.remove_impossible_rook_moves(0, 0)
         expect(rook_a8.possible_moves).to be_empty
+      end
+    end
+    context "start of game for h8" do
+      it "removes impossible moves for rooks" do
+        rook_h8 = board[0][7]
+        rook_h8.create_possible_moves
+        piece_move.remove_impossible_rook_moves(0, 7)
         expect(rook_h8.possible_moves).to be_empty
       end
     end
