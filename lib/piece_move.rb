@@ -53,6 +53,14 @@ class PieceMove
     remove_diagonal_down_right(row, col, piece)
   end
 
+  def remove_impossible_rook_moves(row, col)
+    piece = @board[row][col]
+    remove_straight_up(row, col, piece)
+    remove_straight_right(row, col, piece)
+    remove_straight_down(row, col, piece)
+    remove_straight_left(row, col, piece)
+  end
+
   def remove_diagonal_up_left(row, col, piece)
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
       row -= 1
@@ -117,14 +125,6 @@ class PieceMove
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
       piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " " && !blocked
     end
-  end
-
-  def remove_impossible_rook_moves(row, col)
-    piece = @board[row][col]
-    remove_straight_up(row, col, piece)
-    remove_straight_right(row, col, piece)
-    remove_straight_down(row, col, piece)
-    remove_straight_left(row, col, piece)
   end
 
   def remove_straight_up(row, col, piece)
