@@ -61,6 +61,11 @@ class PieceMove
     remove_straight_left(row, col, piece)
   end
 
+  def remove_impossible_queen_moves(row, col)
+    remove_impossible_bishop_moves(row, col)
+    remove_impossible_rook_moves(row, col)
+  end
+
   def remove_diagonal_up_left(row, col, piece)
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
       row -= 1
