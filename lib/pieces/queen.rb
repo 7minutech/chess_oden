@@ -44,25 +44,25 @@ class Queen
   end
 
   def create_diagonal_down_right(current_row, current_col, board_range)
-    while board_range.include?(current_row) && board_range.include?(current_col)
+    while board_range.include?(current_row + 1) && board_range.include?(current_col + 1)
       @possible_moves.push([current_row += 1, current_col += 1])
     end
   end
 
   def create_diagonal_down_left(current_row, current_col, board_range)
-    while board_range.include?(current_row) && board_range.include?(current_col)
+    while board_range.include?(current_row + 1) && board_range.include?(current_col - 1)
       @possible_moves.push([current_row += 1, current_col -= 1])
     end
   end
 
   def create_diagonal_up_right(current_row, current_col, board_range)
-    while board_range.include?(current_row) && board_range.include?(current_col)
+    while board_range.include?(current_row - 1) && board_range.include?(current_col + 1)
       @possible_moves.push([current_row -= 1, current_col += 1])
     end
   end
 
   def create_diagonal_up_left(current_row, current_col, board_range)
-    while board_range.include?(current_row) && board_range.include?(current_col)
+    while board_range.include?(current_row - 1) && board_range.include?(current_col - 1)
       @possible_moves.push([current_row -= 1, current_col -= 1])
     end
   end
