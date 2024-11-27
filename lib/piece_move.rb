@@ -66,6 +66,14 @@ class PieceMove
     remove_impossible_rook_moves(row, col)
   end
 
+  def remove_impossible_knight_moves(row, col)
+    piece = board[row][col]
+    piece.possible_moves.each do |move|
+      piece_on_move = board[move[0]][move[1]]
+      piece.possible_moves.delete(move) if piece_on_move != " " && piece_on_move.color == piece.color
+    end
+  end
+
   def remove_diagonal_up_left(row, col, piece)
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
       row -= 1
