@@ -342,4 +342,24 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#remove_impossible_king_moves" do
+    let(:board) { piece_move.board }
+    context "at the start of the game for white" do
+      it "removes impossible moves" do
+        white_king = board[7][4]
+        white_king.create_possible_moves
+        piece_move.remove_impossible_king_moves(7, 4)
+        expect(white_king.possible_moves).to be_empty
+      end
+    end
+    context "at the start of the game for white" do
+      it "removes impossible moves" do
+        black_king = board[0][4]
+        black_king.create_possible_moves
+        piece_move.remove_impossible_king_moves(0, 4)
+        expect(black_king.possible_moves).to be_empty
+      end
+    end
+  end
 end
