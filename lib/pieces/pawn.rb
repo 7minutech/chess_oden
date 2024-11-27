@@ -7,6 +7,7 @@ class Pawn
     @current_square = current_square
     @starting_square = current_square
     @possible_moves = []
+    @attacking_moves = []
   end
 
   def self.starting_range?(row, col)
@@ -26,16 +27,44 @@ class Pawn
   def create_possible_moves
     row = @current_square[0]
     col = @current_square[1]
+    create_up_1(row, col)
+    create_up_2(row, col)
+    create_attacking_moves(row, col)
+  end
+
+  def create_up_1(row, col)
+    @possible_moves.push([row - 1, col]) if @color == :white && (row - 1).between?(0, 7)
+    return unless @color == :black && (row + 1).between?(0, 7)
+
+    @possible_moves.push([row + 1, col])
+  end
+
+  def create_up_2(row, col)
+    @possible_moves.push([row - 2, col]) if @color == :white && (row - 2).between?(0, 7)
+    return unless @color == :black && (row + 2).between?(0, 7)
+
+    @possible_moves.push([row + 2, col])
+  end
+
+  def create_attacking_moves(row, col)
     if @color == :white
-      @possible_moves.push([row - 2, col]) unless moved?
-      @possible_moves.push([row - 1, col])
-      @possible_moves.push([row - 1, col + 1])
-      @possible_moves.push([row - 1, col - 1])
+      if (col - 1).between?(0, 7)
+        @possible_moves.push([row - 1, col - 1])
+        @attacking_moves.push([row - 1, col - 1])
+      end
+      if (col + 1).between?(0, 7)
+        @possible_moves.push([row - 1, col + 1])
+        @attacking_moves.push([row - 1, col + 1])
+      end
     else
-      @possible_moves.push([row + 2, col]) unless moved?
-      @possible_moves.push([row + 1, col])
-      @possible_moves.push([row + 1, col + 1])
-      @possible_moves.push([row + 1, col - 1])
+      if (col - 1).between?(0, 7)
+        @possible_moves.push([row + 1, col - 1])
+        @attacking_moves.push([row + 1, col - 1])
+      end
+      if (col + 1).between?(0, 7)
+        @possible_moves.push([row + 1, col + 1])
+        @attacking_moves.push([row + 1, col + 1])
+      end
     end
   end
 
