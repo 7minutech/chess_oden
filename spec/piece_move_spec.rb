@@ -240,5 +240,18 @@ describe PieceMove do
                                                           [4, 2], [4, 1], [4, 0], [4, 4], [4, 5], [4, 6], [4, 7])
       end
     end
+    context "rook is blocked by friendly and enemy piece" do
+      it "removes impossible moves" do
+        rook_f5 = Rook.new(:black, [3, 5])
+        white_pawn_e5 = Pawn.new(:white, [3, 4])
+        black_pawn_g5 = Pawn.new(:black, [3, 6])
+        board[3][5] = rook_f5
+        board[3][4] = white_pawn_e5
+        board[3][6] = black_pawn_g5
+        rook_f5.create_possible_moves
+        piece_move.remove_impossible_rook_moves(3, 5)
+        expect(rook_f5.possible_moves).to contain_exactly([3, 4], [2, 5], [4, 5], [5, 5], [6, 5])
+      end
+    end
   end
 end
