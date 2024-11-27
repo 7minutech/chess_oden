@@ -83,6 +83,24 @@ class PieceMove
     end
   end
 
+  # must create valid moves for other pieces before king
+  # other pieces moves dictate where the king can go
+  # b/c kings moves that put them in check are invalid
+  def remove_impossible_non_king_moves
+    (0..7).each do |row|
+      (0..7).each do |col|
+        piece_on_square = board[row][col]
+        next unless piece_on_square != " " && !piece_on_square.is_a?(King)
+
+        piece_on_square.remove_impossible_bishop_moves if piece_on_square.is_a?(Bishop)
+        piece_on_square.remove_impossible_knight_moves if piece_on_square.is_a?(Knight)
+        piece_on_square.remove_impossible_pawn_moves if piece_on_square.is_a?(Pawn)
+        piece_on_square.remove_impossible_queen_moves if piece_on_square.is_a?(Queen)
+        piece_on_square.remove_impossible_rook_moves if piece_on_square.is_a?(Rook)
+      end
+    end
+  end
+
   def remove_diagonal_up_left(row, col, piece)
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
       row -= 1
