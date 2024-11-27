@@ -230,5 +230,15 @@ describe PieceMove do
         expect(rook_h8.possible_moves).to be_empty
       end
     end
+    context "rook in the middle of the board on d4" do
+      it "removes impossible moves and keep moves attacking" do
+        rook_d4 = Rook.new(:white, [4, 3])
+        board[4][3] = rook_d4
+        rook_d4.create_possible_moves
+        piece_move.remove_impossible_rook_moves(4, 3)
+        expect(rook_d4.possible_moves).to contain_exactly([5, 3], [3, 3], [2, 3], [1, 3],
+                                                          [4, 2], [4, 1], [4, 0], [4, 4], [4, 5], [4, 6], [4, 7])
+      end
+    end
   end
 end
