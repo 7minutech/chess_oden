@@ -142,8 +142,8 @@ describe PieceMove do
     end
     context "when the black bishop can attack a piece" do
       it "removes impossible moves and keeps move to attack" do
-        bishop = Bishop.new(:white, [2, 1])
-        white_pawn = Pawn.new(:black, [4, 3])
+        bishop = Bishop.new(:black, [2, 1])
+        white_pawn = Pawn.new(:white, [4, 3])
         board[2][1] = bishop
         board[4][3] = white_pawn
         bishop.create_possible_moves
