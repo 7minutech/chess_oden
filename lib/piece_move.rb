@@ -68,7 +68,7 @@ class PieceMove
 
   def remove_impossible_knight_moves(row, col)
     piece = board[row][col]
-    piece.possible_moves.each do |move|
+    piece.possible_moves.dup.each do |move|
       piece_on_move = board[move[0]][move[1]]
       piece.possible_moves.delete(move) if piece_on_move != " " && piece_on_move.color == piece.color
     end
