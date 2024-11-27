@@ -58,10 +58,12 @@ class PieceMove
       row -= 1
       col -= 1
     end
+    opposite_piece_found = 0
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7)
       row -= 1
       col -= 1
-      piece.possible_moves.delete([row, col])
+      opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
     end
   end
 
@@ -70,10 +72,12 @@ class PieceMove
       row -= 1
       col += 1
     end
+    opposite_piece_found = 0
     while (row - 1).between?(0, 7) && (col + 1).between?(0, 7)
       row -= 1
       col += 1
-      piece.possible_moves.delete([row, col])
+      opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
     end
   end
 
@@ -82,10 +86,12 @@ class PieceMove
       row += 1
       col -= 1
     end
+    opposite_piece_found = 0
     while (row + 1).between?(0, 7) && (col - 1).between?(0, 7)
       row += 1
       col -= 1
-      piece.possible_moves.delete([row, col])
+      opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
     end
   end
 
@@ -94,10 +100,13 @@ class PieceMove
       row += 1
       col += 1
     end
+    opposite_piece_found = 0
+
     while (row + 1).between?(0, 7) && (col + 1).between?(0, 7)
       row += 1
       col += 1
-      piece.possible_moves.delete([row, col])
+      opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
     end
   end
 end
