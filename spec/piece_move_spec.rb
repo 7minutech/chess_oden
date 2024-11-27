@@ -91,28 +91,28 @@ describe PieceMove do
   describe "#remove_impossible_bishop_moves" do
     let(:board) { piece_move.board }
     context "at the start of the game" do
-      xit "removes impossible moves for white light squared bishop" do
+      it "removes impossible moves for white light squared bishop" do
         white_light_squared_bishop = Bishop.new(:white, [7, 5])
         board[7][5] = white_light_squared_bishop
         white_light_squared_bishop.create_possible_moves
         piece_move.remove_impossible_bishop_moves(7, 5)
         expect(white_light_squared_bishop.possible_moves).to be_empty
       end
-      xit "removes impossible moves for white dark squared bishop" do
+      it "removes impossible moves for white dark squared bishop" do
         white_dark_squared_bishop = Bishop.new(:white, [7, 2])
         board[7][2] = white_dark_squared_bishop
         white_dark_squared_bishop.create_possible_moves
         piece_move.remove_impossible_bishop_moves(7, 2)
         expect(white_dark_squared_bishop.possible_moves).to be_empty
       end
-      xit "removes impossible moves for black light squared bishop" do
+      it "removes impossible moves for black light squared bishop" do
         black_light_squared_bishop = Bishop.new(:black, [0, 5])
         board[0][5] = black_light_squared_bishop
         black_light_squared_bishop.create_possible_moves
         piece_move.remove_impossible_bishop_moves(0, 5)
         expect(black_light_squared_bishop.possible_moves).to be_empty
       end
-      xit "removes impossible moves for black dark squared bishop" do
+      it "removes impossible moves for black dark squared bishop" do
         black_dark_squared_bishop = Bishop.new(:black, [0, 2])
         board[0][2] = black_dark_squared_bishop
         black_dark_squared_bishop.create_possible_moves
@@ -137,7 +137,7 @@ describe PieceMove do
         board[3][5] = black_pawn
         bishop.create_possible_moves
         piece_move.remove_impossible_bishop_moves(5, 3)
-        expect(bishop.possible_moves).to contain_exactly([4, 2], [4, 4], [3, 1], [3, 5], [2, 0], [2, 5])
+        expect(bishop.possible_moves).to contain_exactly([4, 2], [4, 4], [3, 1], [3, 5], [2, 0])
       end
     end
     context "when the black bishop can attack a piece" do
