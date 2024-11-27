@@ -58,12 +58,13 @@ class PieceMove
       row -= 1
       col -= 1
     end
+    blocked = true if @board[row - 1][col - 1].color == piece.color
     opposite_piece_found = 0
     while (row - 1).between?(0, 7) && (col - 1).between?(0, 7)
       row -= 1
       col -= 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
-      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " " && !blocked
     end
   end
 
@@ -72,26 +73,32 @@ class PieceMove
       row -= 1
       col += 1
     end
+    blocked = true if @board[row - 1][col + 1].color == piece.color
+
     opposite_piece_found = 0
     while (row - 1).between?(0, 7) && (col + 1).between?(0, 7)
       row -= 1
       col += 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
-      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " " && !blocked
     end
   end
 
   def remove_diagonal_down_left(row, col, piece)
+    # binding.pry
     while (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row + 1][col - 1] == " "
       row += 1
       col -= 1
+    end
+    if ((row + 1).between?(0, 7) && (col - 1).between?(0, 7)) && @board[row + 1][col - 1].color == piece.color
+      blocked = true
     end
     opposite_piece_found = 0
     while (row + 1).between?(0, 7) && (col - 1).between?(0, 7)
       row += 1
       col -= 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
-      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " " && !blocked
     end
   end
 
@@ -100,13 +107,15 @@ class PieceMove
       row += 1
       col += 1
     end
+    if ((row + 1).between?(0, 7) && (col + 1).between?(0, 7)) && @board[row + 1][col + 1].color == piece.color
+      blocked = true
+    end
     opposite_piece_found = 0
-
     while (row + 1).between?(0, 7) && (col + 1).between?(0, 7)
       row += 1
       col += 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
-      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " "
+      piece.possible_moves.delete([row, col]) unless opposite_piece_found == 1 && @board[row][col] != " " && !blocked
     end
   end
 end
