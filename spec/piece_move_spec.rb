@@ -273,5 +273,19 @@ describe PieceMove do
         expect(black_queen.possible_moves).to be_empty
       end
     end
+    context "white queen in middle of board e4" do
+      it "removes white queen's possible moves" do
+        white_queen_e4 = Queen.new(:white, [4, 4])
+        board[4][4] = white_queen_e4
+        white_queen_e4.create_possible_moves
+        piece_move.remove_impossible_queen_moves(4, 4)
+        expect(white_queen_e4.possible_moves).to contain_exactly([4, 3], [4, 2], [4, 1], [4, 0],
+                                                                 [4, 5], [4, 6], [4, 7],
+                                                                 [5, 4], [3, 4], [2, 4], [1, 4],
+                                                                 [3, 3], [2, 2], [1, 1],
+                                                                 [3, 5], [2, 6], [1, 7],
+                                                                 [5, 3], [5, 5])
+      end
+    end
   end
 end
