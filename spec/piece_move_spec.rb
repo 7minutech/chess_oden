@@ -126,7 +126,7 @@ describe PieceMove do
         board[4][3] = bishop
         bishop.create_possible_moves
         piece_move.remove_impossible_bishop_moves(4, 3)
-        expect(bishop.possible_moves).to contain_exactly([5, 4], [5, 2], [3, 4], [3, 2], [2, 1], [2, 5])
+        expect(bishop.possible_moves).to contain_exactly([5, 4], [5, 2], [3, 4], [3, 2], [2, 1], [2, 5], [1, 6], [1, 0])
       end
     end
     context "when the white bishop can attack a piece" do
