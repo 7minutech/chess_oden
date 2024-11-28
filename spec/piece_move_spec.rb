@@ -349,7 +349,8 @@ describe PieceMove do
       it "removes impossible moves" do
         white_king = board[7][4]
         white_king.create_possible_moves
-        piece_move.remove_impossible_king_moves(7, 4)
+        piece_move.remove_impossible_non_king_moves
+        piece_move.remove_impossible_king_moves
         expect(white_king.possible_moves).to be_empty
       end
     end
@@ -357,7 +358,8 @@ describe PieceMove do
       it "removes impossible moves" do
         black_king = board[0][4]
         black_king.create_possible_moves
-        piece_move.remove_impossible_king_moves(0, 4)
+        piece_move.remove_impossible_non_king_moves
+        piece_move.remove_impossible_king_moves
         expect(black_king.possible_moves).to be_empty
       end
     end
@@ -370,7 +372,7 @@ describe PieceMove do
         piece_move.board_obj.display_board
         piece_move.create_moves
         piece_move.remove_impossible_non_king_moves
-        piece_move.remove_impossible_king_moves(4, 3)
+        piece_move.remove_impossible_king_moves
         expect(white_king.possible_moves).to contain_exactly([3, 2], [5, 3], [5, 4], [4, 4])
       end
     end
