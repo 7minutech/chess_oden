@@ -69,17 +69,12 @@ class ChessGame
     @selected_next_square = [translated_move[0], translated_move[1]]
   end
 
-  def move_piece(old_square, new_square)
-    @board[old_square.current_square[0]][old_square.current_square[1]] = " "
-    @board[new_square[0]][new_square[1]] = @selected_square
-    @selected_square.current_square = [new_square[0], new_square[1]]
-  end
-
   def play_round
     create_moves_for_pieces
     valid_piece_input
     valid_move_input
-    move_piece(@selected_square, @selected_next_square)
+    @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
+                           [@selected_next_square[0], @selected_next_square[1]])
     @move_logic.board_obj.display_board
   end
 end

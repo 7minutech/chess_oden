@@ -280,4 +280,11 @@ class PieceMove
       end
     end
   end
+
+  def move_piece(old_square, new_square)
+    piece = @board[old_square[0]][old_square[1]]
+    @board[old_square[0]][old_square[1]] = " "
+    @board[new_square[0]][new_square[1]] = piece
+    piece.current_square[new_square[0], new_square[1]]
+  end
 end
