@@ -29,6 +29,7 @@ class ChessGame
       puts "#{square} is not valid, please enter a valid move"
       square = piece_input
     end
+    puts "\nSelected Square: #{square}"
     translated_move = PieceMove.convert_chess_notation(square)
     @selected_square = @board[translated_move[0]][translated_move[1]]
     @board[translated_move[0]][translated_move[1]]
@@ -65,6 +66,7 @@ class ChessGame
       puts "#{move} is not a valid move"
       move = move_input
     end
+    puts "\nSquare to move: #{move}"
     translated_move = PieceMove.convert_chess_notation(move)
     @selected_next_square = [translated_move[0], translated_move[1]]
   end

@@ -13,6 +13,7 @@ class Board
   end
 
   def display_board
+    print "\n"
     print "  "
     (97..104).each { |num| print " #{num.chr} " }
     count = 8
