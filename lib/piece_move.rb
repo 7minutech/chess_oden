@@ -123,6 +123,15 @@ class PieceMove
     end
   end
 
+  def clear_moves
+    (0..7).each do |row|
+      (0..7).each do |col|
+        piece_on_square = board[row][col]
+        piece_on_square.possible_moves.clear if piece_on_square != " "
+      end
+    end
+  end
+
   # must create valid moves for other pieces before king
   # other pieces moves dictate where the king can go
   # b/c kings moves that put them in check are invalid
@@ -131,7 +140,6 @@ class PieceMove
       (0..7).each do |col|
         piece_on_square = board[row][col]
         if piece_on_square != " " && !piece_on_square.is_a?(King)
-
           remove_impossible_bishop_moves(row, col) if piece_on_square.is_a?(Bishop)
           remove_impossible_knight_moves(row, col) if piece_on_square.is_a?(Knight)
           remove_impossible_pawn_moves(row, col) if piece_on_square.is_a?(Pawn)
@@ -159,11 +167,12 @@ class PieceMove
   end
 
   def remove_diagonal_up_right(row, col, piece)
+    # binding.pry if row == 7 && col == 2
     while (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && @board[row - 1][col + 1] == " "
       row -= 1
       col += 1
     end
-    blocked = true if @board[row - 1][col + 1].color == piece.color
+    blocked = true if square_in_bounds?(row - 1, col + 1) && @board[row - 1][col + 1].color == piece.color
 
     opposite_piece_found = 0
     while (row - 1).between?(0, 7) && (col + 1).between?(0, 7)
@@ -286,5 +295,11 @@ class PieceMove
     @board[old_square[0]][old_square[1]] = " "
     @board[new_square[0]][new_square[1]] = piece
     piece.current_square[new_square[0], new_square[1]]
+  end
+
+  def square_in_bounds?(row, col)
+    return true if row.between?(0, 7) && col.between?(0, 7)
+
+    false
   end
 end
