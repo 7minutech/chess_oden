@@ -6,6 +6,7 @@ class ChessGame
     @move_logic = PieceMove.new
     @color_turn = :white
     @board = @move_logic.board_obj.board
+    @selected_piece = nil
   end
 
   def create_moves_for_pieces
@@ -28,6 +29,7 @@ class ChessGame
       piece_input
     end
     translated_move = PieceMove.convert_chess_notation(square)
+    @selected_piece = @board[translated_move[0]][translated_move[1]]
     @board[translated_move[0]][translated_move[1]]
   end
 
