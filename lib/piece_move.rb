@@ -24,7 +24,7 @@ class PieceMove
   end
 
   def chess_notation_to_square(chess_notation)
-    square = convert_chess_notation(chess_notation)
+    square = PieceMove.convert_chess_notation(chess_notation)
     @board[square[0]][square[1]]
   end
 
