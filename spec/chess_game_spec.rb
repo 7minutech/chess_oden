@@ -56,4 +56,20 @@ describe ChessGame do
       end
     end
   end
+  describe "#play_round" do
+    context "at the start of the game" do
+      before do
+        selected_square = "e2"
+        selected_move = "e4"
+        allow(game).to receive(:gets).with(selected_square, selected_move)
+      end
+      it "moves the correct piece to the correct square" do
+        game.send(:play_round)
+        old_position = game.move_logic.chess_notation_to_square("e2")
+        new_position = game.move_logic.chess_notation_to_square("e4")
+        expect(new_position).to be_a(Pawn)
+        expect(old_position).to eq(" ")
+      end
+    end
+  end
 end
