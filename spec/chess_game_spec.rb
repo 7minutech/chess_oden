@@ -61,7 +61,7 @@ describe ChessGame do
       before do
         selected_square = "e2"
         selected_move = "e4"
-        allow(game).to receive(:gets).with(selected_square, selected_move)
+        allow(game).to receive(:gets).and_return(selected_square, selected_move)
       end
       it "moves the correct piece to the correct square" do
         game.send(:play_round)
