@@ -152,13 +152,13 @@ class PieceMove
   end
 
   def remove_diagonal_up_left(row, col, piece)
-    while (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row - 1][col - 1] == " "
+    while square_in_bounds?(row - 1, col - 1) && @board[row - 1][col - 1] == " "
       row -= 1
       col -= 1
     end
     blocked = true if @board[row - 1][col - 1].color == piece.color
     opposite_piece_found = 0
-    while (row - 1).between?(0, 7) && (col - 1).between?(0, 7)
+    while square_in_bounds?(row - 1, col - 1)
       row -= 1
       col -= 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
@@ -168,14 +168,14 @@ class PieceMove
 
   def remove_diagonal_up_right(row, col, piece)
     # binding.pry if row == 7 && col == 2
-    while (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && @board[row - 1][col + 1] == " "
+    while square_in_bounds?(row - 1, col + 1) && @board[row - 1][col + 1] == " "
       row -= 1
       col += 1
     end
     blocked = true if square_in_bounds?(row - 1, col + 1) && @board[row - 1][col + 1].color == piece.color
 
     opposite_piece_found = 0
-    while (row - 1).between?(0, 7) && (col + 1).between?(0, 7)
+    while square_in_bounds?(row - 1, col + 1)
       row -= 1
       col += 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
@@ -185,15 +185,13 @@ class PieceMove
 
   def remove_diagonal_down_left(row, col, piece)
     # binding.pry
-    while (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && @board[row + 1][col - 1] == " "
+    while square_in_bounds?(row + 1, col - 1) && @board[row + 1][col - 1] == " "
       row += 1
       col -= 1
     end
-    if ((row + 1).between?(0, 7) && (col - 1).between?(0, 7)) && @board[row + 1][col - 1].color == piece.color
-      blocked = true
-    end
+    blocked = true if square_in_bounds?(row + 1, col - 1) && @board[row + 1][col - 1].color == piece.color
     opposite_piece_found = 0
-    while (row + 1).between?(0, 7) && (col - 1).between?(0, 7)
+    while square_in_bounds?(row + 1, col - 1)
       row += 1
       col -= 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
@@ -202,15 +200,13 @@ class PieceMove
   end
 
   def remove_diagonal_down_right(row, col, piece)
-    while (row + 1).between?(0, 7) && (col + 1).between?(0, 7) && @board[row + 1][col + 1] == " "
+    while square_in_bounds?(row + 1, col + 1) && @board[row + 1][col + 1] == " "
       row += 1
       col += 1
     end
-    if ((row + 1).between?(0, 7) && (col + 1).between?(0, 7)) && @board[row + 1][col + 1].color == piece.color
-      blocked = true
-    end
+    blocked = true if square_in_bounds?(row + 1, col + 1) && @board[row + 1][col + 1].color == piece.color
     opposite_piece_found = 0
-    while (row + 1).between?(0, 7) && (col + 1).between?(0, 7)
+    while square_in_bounds?(row + 1, col + 1)
       row += 1
       col += 1
       opposite_piece_found += 1 if @board[row][col] != " " && @board[row][col].color != piece.color
