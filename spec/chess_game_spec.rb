@@ -42,15 +42,17 @@ describe ChessGame do
     context "when a valid move is entered for white" do
       it "returns true" do
         selected_piece = game.board[6][3]
-        valid_move = [5, 3]
+        valid_move = "d3"
+        game.send(:create_moves_for_pieces)
         expect(game.valid_move?(selected_piece, valid_move)).to be true
       end
     end
     context "when a invalid move is entered for white" do
       it "returns true" do
         selected_piece = game.board[6][3]
-        valid_move = [1, 3]
-        expect(game.valid_move?(selected_piece, valid_move)).to be false
+        invalid_move = "h1"
+        game.send(:create_moves_for_pieces)
+        expect(game.valid_move?(selected_piece, invalid_move)).to be false
       end
     end
   end
