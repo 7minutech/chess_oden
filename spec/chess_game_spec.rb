@@ -38,19 +38,19 @@ describe ChessGame do
       end
     end
   end
-  describe "#valid_move" do
+  describe "#valid_move?" do
     context "when a valid move is entered for white" do
-      before do
-        valid_move1 = "e4"
-        valid_move2 = "d3"
-        allow(game).to receive(:gets).and_return(valid_move1, valid_move2)
+      it "returns true" do
+        selected_piece = game.board[6][3]
+        valid_move = [5, 3]
+        expect(game.valid_move?(selected_piece, valid_move)).to be true
       end
-      it "returns no error message" do
-        prompt_message = "Enter your move: "
-        error_message = "That is not a valid move please enter a valid"
-        allow(game).to receive(:puts).with(prompt_message).twice
-        expect(game).not_to receive(:puts).with(error_message)
-        game.send(:valid_move).twice
+    end
+    context "when a invalid move is entered for white" do
+      it "returns true" do
+        selected_piece = game.board[6][3]
+        valid_move = [1, 3]
+        expect(game.valid_move?(selected_piece, valid_move)).to be false
       end
     end
   end
