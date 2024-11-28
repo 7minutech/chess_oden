@@ -1,12 +1,13 @@
 require_relative "piece_move"
 class ChessGame
-  attr_accessor :board
+  attr_accessor :board, :move_logic
 
   def initialize
     @move_logic = PieceMove.new
     @color_turn = :white
     @board = @move_logic.board_obj.board
-    @selected_piece = nil
+    @selected_square = nil
+    @selected_next_square = nil
   end
 
   def create_moves_for_pieces
@@ -26,10 +27,10 @@ class ChessGame
     square = piece_input
     until valid_piece?(square)
       puts "#{square} is not valid, please enter a valid move"
-      piece_input
+      square = piece_input
     end
     translated_move = PieceMove.convert_chess_notation(square)
-    @selected_piece = @board[translated_move[0]][translated_move[1]]
+    @selected_square = @board[translated_move[0]][translated_move[1]]
     @board[translated_move[0]][translated_move[1]]
   end
 
@@ -43,12 +44,12 @@ class ChessGame
 
   def piece_input
     print "Select the square of the piece you'd like to move: "
-    get.chomp
+    gets.chomp
   end
 
   def move_input
     print "Select the square where you'd like to move: "
-    get.chomp
+    gets.chomp
   end
 
   def valid_move?(selected_piece, move)
@@ -59,10 +60,26 @@ class ChessGame
   end
 
   def valid_move_input
-    until valid_move?(valid_piece_input, move_input)
-      puts("Not a valid move")
-      move_input
+    move = move_input
+    until valid_move?(@selected_square, move)
+      puts "#{move} is not a valid move"
+      move = move_input
     end
-    move_input
+    translated_move = PieceMove.convert_chess_notation(move)
+    @selected_next_square = [translated_move[0], translated_move[1]]
+  end
+
+  def move_piece(old_square, new_square)
+    @board[old_square.current_square[0]][old_square.current_square[1]] = " "
+    @board[new_square[0]][new_square[1]] = @selected_square
+    @selected_square.current_square = [new_square[0], new_square[1]]
+  end
+
+  def play_round
+    create_moves_for_pieces
+    valid_piece_input
+    valid_move_input
+    move_piece(@selected_square, @selected_next_square)
+    @move_logic.board_obj.display_board
   end
 end
