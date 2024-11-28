@@ -76,5 +76,7 @@ class ChessGame
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
     @move_logic.board_obj.display_board
+    flip_player_turn
+    @move_logic.clear_moves
   end
 end
