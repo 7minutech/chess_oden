@@ -23,6 +23,11 @@ class PieceMove
     [rank, file]
   end
 
+  def chess_notation_to_square(chess_notation)
+    square = convert_chess_notation(chess_notation)
+    @board[square[0]][square[1]]
+  end
+
   def remove_impossible_pawn_moves(row, col)
     piece = @board[row][col]
     piece.possible_moves.dup.each do |move|
