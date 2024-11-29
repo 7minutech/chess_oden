@@ -40,6 +40,8 @@ class Pawn
   end
 
   def create_up_2(row, col)
+    return unless @starting_square == @current_square
+
     @possible_moves.push([row - 2, col]) if @color == :white && (row - 2).between?(0, 7)
     return unless @color == :black && (row + 2).between?(0, 7)
 
