@@ -102,5 +102,31 @@ describe ChessGame do
         expect(final_position_black_pawn).to be_a(Pawn).and have_attributes(color: :black)
       end
     end
+    context "white and black both play a move" do
+      before do
+        moves = %w[d2 d4 e7 e5 c1 f4 e5 f4]
+        allow(game).to receive(:gets).and_return(*moves)
+        (moves.length / 2).times { game.send(:play_round) }
+      end
+      it "moves the correct piece to the correct square" do
+        final_position_white_pawn = game.move_logic.chess_notation_to_square("d4")
+        final_position_black_pawn = game.move_logic.chess_notation_to_square("f4")
+        expect(final_position_white_pawn).to be_a(Pawn).and have_attributes(color: :white)
+        expect(final_position_black_pawn).to be_a(Pawn).and have_attributes(color: :black)
+      end
+    end
+    context "given invalid moves" do
+      before do
+        moves = %w[d2 d3 e7 e6 d3 d5 d4 e6 e4 e5]
+        allow(game).to receive(:gets).and_return(*moves)
+        ((moves.length / 2) - 1).times { game.send(:play_round) }
+      end
+      it "reprompt until valid move is given and moves correctly" do
+        final_position_white_pawn = game.move_logic.chess_notation_to_square("d4")
+        final_position_black_pawn = game.move_logic.chess_notation_to_square("e5")
+        expect(final_position_white_pawn).to be_a(Pawn).and have_attributes(color: :white)
+        expect(final_position_black_pawn).to be_a(Pawn).and have_attributes(color: :black)
+      end
+    end
   end
 end
