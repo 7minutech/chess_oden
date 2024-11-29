@@ -156,7 +156,7 @@ class PieceMove
       row -= 1
       col -= 1
     end
-    blocked = true if @board[row - 1][col - 1].color == piece.color
+    blocked = true if square_in_bounds?(row - 1, col + 1) && @board[row - 1][col - 1].color == piece.color
     opposite_piece_found = 0
     while square_in_bounds?(row - 1, col - 1)
       row -= 1
