@@ -89,5 +89,18 @@ describe ChessGame do
         expect(old_position_black).to eq(" ")
       end
     end
+    context "white and black both play a move" do
+      before do
+        moves = %w[d2 d4 e7 e5 c1 f4 e5 f4]
+        allow(game).to receive(:gets).and_return(*moves)
+        moves.each { game.send(:play_round) }
+      end
+      it "moves the correct piece to the correct square" do
+        final_position_white_pawn = game.move_logic.chess_notation_to_square("d4")
+        final_position_black_pawn = game.move_logic.chess_notation_to_square("f4")
+        expect(final_position_white_pawn).to be_a(Pawn).and have_attributes(color: :white)
+        expect(final_position_black_pawn).to be_a(Pawn).and have_attributes(color: :black)
+      end
+    end
   end
 end
