@@ -30,6 +30,7 @@ class PieceMove
 
   def remove_impossible_pawn_moves(row, col)
     piece = @board[row][col]
+    # binding.pry if row == 3
     piece.possible_moves.dup.each do |move|
       square = @board[move[0]][move[1]]
       if (move[0] - row).abs == 1 && move[1] == col && square != (" ")
@@ -127,7 +128,10 @@ class PieceMove
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
-        piece_on_square.possible_moves.clear if piece_on_square != " "
+        if piece_on_square != " "
+          piece_on_square.possible_moves.clear
+          piece_on_square.attacking_moves.clear if piece_on_square.is_a?(Pawn)
+        end
       end
     end
   end
@@ -288,9 +292,10 @@ class PieceMove
 
   def move_piece(old_square, new_square)
     piece = @board[old_square[0]][old_square[1]]
+    # binding.pry
     @board[old_square[0]][old_square[1]] = " "
     @board[new_square[0]][new_square[1]] = piece
-    piece.current_square[new_square[0], new_square[1]]
+    piece.current_square = [new_square[0], new_square[1]]
   end
 
   def square_in_bounds?(row, col)
