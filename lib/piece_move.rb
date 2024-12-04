@@ -362,4 +362,14 @@ class PieceMove
       end
     end
   end
+
+  def possible_block?
+    unless checking_pieces.include?(Pawn) || checking_pieces.include?(Knight)
+      return true if checking_pieces.length == 1
+
+      return false
+
+    end
+    false
+  end
 end
