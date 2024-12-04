@@ -391,5 +391,16 @@ describe PieceMove do
         expect(piece_move.check?).to be true
       end
     end
+    context "when black king is in check by a pawn" do
+      it "returns true" do
+        black_king = King.new(:black, [4, 3])
+        white_pawn = Pawn.new(:white, [3, 4])
+        board[4][3] = black_king
+        board[3][4] = white_pawn
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be true
+      end
+    end
   end
 end
