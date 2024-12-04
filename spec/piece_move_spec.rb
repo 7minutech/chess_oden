@@ -409,5 +409,16 @@ describe PieceMove do
         expect(piece_move.check?).to be false
       end
     end
+    context "when white king is in check by black queen" do
+      it "returns true" do
+        white_king = King.new(:white, [4, 3])
+        black_queen = Queen.new(:black, [2, 1])
+        board[4][3] = white_king
+        board[2][1] = black_queen
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be true
+      end
+    end
   end
 end
