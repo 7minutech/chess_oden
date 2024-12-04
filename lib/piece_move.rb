@@ -9,6 +9,8 @@ class PieceMove
     @board = @board_obj.board
     @board_obj.fill_board
     @king_squares = []
+    @white_pieces = []
+    @black_pieces = []
   end
 
   def self.convert_chess_notation(chess_notation)
@@ -119,7 +121,14 @@ class PieceMove
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
-        piece_on_square.create_possible_moves if piece_on_square != " "
+        next unless piece_on_square != " "
+
+        piece_on_square.create_possible_moves
+        if piece_on_square.color == :white
+          white_pieces.push(piece_on_square)
+        else
+          black_pieces.push(piece_on_square)
+        end
       end
     end
   end
