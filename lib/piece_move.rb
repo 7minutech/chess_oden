@@ -2,7 +2,7 @@ require_relative "board"
 require "pry-byebug"
 
 class PieceMove
-  attr_reader :board_obj, :board
+  attr_reader :board_obj, :board, :checking_pieces, :white_pieces, :black_pieces
 
   def initialize
     @board_obj = Board.new
@@ -13,6 +13,7 @@ class PieceMove
     @black_pieces = []
     @white_king = nil
     @black_king = nil
+    @checking_pieces = []
   end
 
   def self.convert_chess_notation(chess_notation)
@@ -347,5 +348,18 @@ class PieceMove
       return true if attacking_moves.include?(square)
     end
     false
+  end
+
+  def find_checking_pieces(color_in_check)
+    checking_pieces.clear
+    if color_in_check == :white
+      black_pieces.each do |piece|
+        checking_pieces.push(piece) if piece.possible_moves.include?(@white_king.current_square)
+      end
+    else
+      white_pieces.each do |piece|
+        checking_pieces.push(piece) if piece.possible_moves.include?(@black_king.current_square)
+      end
+    end
   end
 end
