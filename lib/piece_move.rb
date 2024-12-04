@@ -150,6 +150,11 @@ class PieceMove
     end
   end
 
+  def clear_pieces
+    @white_pieces.clear
+    @black_pieces.clear
+  end
+
   # must create valid moves for other pieces before king
   # other pieces moves dictate where the king can go
   # b/c kings moves that put them in check are invalid
