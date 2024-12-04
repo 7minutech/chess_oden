@@ -125,9 +125,10 @@ class PieceMove
 
         piece_on_square.create_possible_moves
         if piece_on_square.color == :white
-          white_pieces.push(piece_on_square)
+
+          @white_pieces.push(piece_on_square)
         else
-          black_pieces.push(piece_on_square)
+          @black_pieces.push(piece_on_square)
         end
       end
     end
