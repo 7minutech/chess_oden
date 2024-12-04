@@ -426,14 +426,14 @@ describe PieceMove do
     let(:board) { piece_move.board }
     context "when 2 pieces are checking the king" do
       it "returns a list of the checking pieces" do
-        white_king = King.new(:white, [4, 3])
         black_queen = Queen.new(:black, [2, 1])
         black_rook = Rook.new(:black, [4, 6])
-        board[4][3] = white_king
+        piece_move.move_piece([7, 4], [4, 3])
         board[2][1] = black_queen
         board[4][6] = black_rook
         piece_move.board_obj.display_board
         piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
         expect(piece_move.checking_pieces.length).to eq(2)
         expect(piece_move.checking_pieces).to contain_exactly(Queen, Rook)
       end
