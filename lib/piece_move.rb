@@ -124,6 +124,11 @@ class PieceMove
     end
   end
 
+  def create_possible_moves
+    create_moves
+    remove_impossible_moves
+  end
+
   def clear_moves
     (0..7).each do |row|
       (0..7).each do |col|
