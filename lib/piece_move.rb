@@ -364,7 +364,8 @@ class PieceMove
   end
 
   def possible_block?
-    unless checking_pieces.include?(Pawn) || checking_pieces.include?(Knight)
+    knight_or_pawn = checking_pieces.any? { |piece| piece.is_a?(Pawn) || piece.is_a?(Knight) }
+    unless knight_or_pawn
       return true if checking_pieces.length == 1
 
       return false
