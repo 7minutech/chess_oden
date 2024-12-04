@@ -439,4 +439,19 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#possible_block?" do
+    let(:board) { piece_move.board }
+    context "when king check can be blocked" do
+      it "returns true" do
+        black_rook = Rook.new(:black, [4, 6])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[4][6] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.possible_block?).to be true
+      end
+    end
+  end
 end
