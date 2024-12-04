@@ -11,6 +11,8 @@ class PieceMove
     @king_squares = []
     @white_pieces = []
     @black_pieces = []
+    @white_king = nil
+    @black_king = nil
   end
 
   def self.convert_chess_notation(chess_notation)
@@ -170,7 +172,11 @@ class PieceMove
           remove_impossible_queen_moves(row, col) if piece_on_square.is_a?(Queen)
           remove_impossible_rook_moves(row, col) if piece_on_square.is_a?(Rook)
         end
-        @king_squares.push([row, col]) if piece_on_square != " " && piece_on_square.is_a?(King)
+        next unless piece_on_square != " " && piece_on_square.is_a?(King)
+
+        @king_squares.push([row, col])
+        @white_king = piece_on_square if piece_on_square.color == :white
+        @black_king = piece_on_square if piece_on_square.color == :black
       end
     end
   end
