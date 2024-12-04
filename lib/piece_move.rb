@@ -323,4 +323,23 @@ class PieceMove
 
     false
   end
+
+  def check?
+    attacking_moves = []
+    @white_pieces.each do |piece|
+      piece.possible_moves.each do |move|
+        attacking_moves.push(move)
+      end
+    end
+    @black_pieces.each do |piece|
+      piece.possible_moves.each do |move|
+        attacking_moves.push(move)
+      end
+    end
+    attacking_moves = attacking_moves.uniq
+    @king_squares.each do |square|
+      return true if attacking_moves.include?(square)
+    end
+    false
+  end
 end
