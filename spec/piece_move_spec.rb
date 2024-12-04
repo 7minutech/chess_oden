@@ -402,5 +402,12 @@ describe PieceMove do
         expect(piece_move.check?).to be true
       end
     end
+    context "when white king is not in check" do
+      it "returns false" do
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be false
+      end
+    end
   end
 end
