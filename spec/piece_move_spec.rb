@@ -488,4 +488,19 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#checking_path" do
+    let(:board) { piece_move.board }
+    context "when rook is checking" do
+      it "returns path of the check" do
+        black_rook = Rook.new(:black, [4, 6])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[4][6] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([4, 5][4, 4])
+      end
+    end
+  end
 end
