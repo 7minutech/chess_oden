@@ -502,5 +502,16 @@ describe PieceMove do
         expect(piece_move.checking_path).to contain_exactly([4, 5], [4, 4])
       end
     end
+    context "when check is vertical" do
+      it "returns path of the check" do
+        black_rook = Rook.new(:black, [2, 3])
+        piece_move.move_piece([7, 4], [5, 3])
+        board[2][3] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([3, 3], [4, 3])
+      end
+    end
   end
 end
