@@ -568,7 +568,7 @@ describe PieceMove do
         expect(piece_move.checking_path).to contain_exactly([4, 2], [3, 3])
       end
     end
-    context "when check is diagonal down-left" do
+    context "when check is diagonal down-right" do
       it "returns path of the check" do
         white_queen = Queen.new(:white, [5, 6])
         piece_move.move_piece([0, 4], [2, 3])
