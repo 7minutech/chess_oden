@@ -438,18 +438,18 @@ class PieceMove
     checking_path
   end
 
-  def checking_path_diagonal?(king_square, checking_square)
+  def checking_path_diagonal?(king_square, checking_piece)
   end
 
-  def checking_path_diagonal_up_right?(king_square, checking_square)
+  def checking_path_diagonal_up_right?(king_square, checking_piece)
   end
 
-  def checking_path_diagonal_up_left?(king_square, checking_square)
+  def checking_path_diagonal_up_left?(king_square, checking_piece)
   end
 
-  def checking_path_diagonal_down_right?(king_square, checking_square)
+  def checking_path_diagonal_down_right?(king_square, checking_piece)
   end
 
-  def checking_path_diagonal_down_left?(king_square, checking_square)
+  def checking_path_diagonal_down_left?(king_square, checking_piece)
   end
 end
