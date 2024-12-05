@@ -381,13 +381,23 @@ class PieceMove
            else
              @white_king
            end
-    return unless checking_path_horizontal?(king.current_square, checking_piece)
-
-    horizontal_checking_path(king.current_square, checking_piece)
+    if checking_path_horizontal?(king.current_square,
+                                 checking_piece)
+      return horizontal_checking_path(king.current_square,
+                                      checking_piece)
+    end
+    vertical_checking_path(king.current_square, checking_piece) if checking_path_vertical?(king.current_square,
+                                                                                           checking_piece)
   end
 
   def checking_path_horizontal?(king_square, checking_piece)
     return true if king_square[0] == checking_piece.current_square[0]
+
+    false
+  end
+
+  def checking_path_vertical?(king_square, checking_piece)
+    return true if king_square[1] == checking_piece.current_square[1]
 
     false
   end
@@ -402,7 +412,7 @@ class PieceMove
         checking_path.push([row, checking_piece_col])
       end
     else
-      while king_square[1] > checking_piece_col
+      while king_square[1] > checking_piece_col + 1
         checking_piece_col += 1
         checking_path.push([row, checking_piece_col])
       end
@@ -410,7 +420,22 @@ class PieceMove
     checking_path
   end
 
-  def checking_path_vertical?(king_square, checking_square)
+  def vertical_checking_path(king_square, checking_piece)
+    col = king_square[1]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_path = []
+    if king_square[0] < checking_piece_row
+      while king_square[0] < (checking_piece_row - 1)
+        checking_piece_row -= 1
+        checking_path.push([checking_piece_row, col])
+      end
+    else
+      while king_square[0] > (checking_piece_row + 1)
+        checking_piece_row += 1
+        checking_path.push([checking_piece_row, col])
+      end
+    end
+    checking_path
   end
 
   def checking_path_diagonal?(king_square, checking_square)
