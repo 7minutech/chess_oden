@@ -535,5 +535,49 @@ describe PieceMove do
         expect(piece_move.checking_path).to contain_exactly([4, 1], [4, 2], [4, 3], [4, 4], [4, 5])
       end
     end
+    context "when check is diagonal up-left" do
+      it "returns path of the check" do
+        black_bishop = Bishop.new(:black, [2, 1])
+        piece_move.move_piece([7, 4], [5, 4])
+        board[2][1] = black_bishop
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([3, 2], [4, 3])
+      end
+    end
+    context "when check is diagonal up-right" do
+      it "returns path of the check" do
+        black_bishop = Bishop.new(:black, [2, 6])
+        piece_move.move_piece([7, 4], [5, 3])
+        board[2][6] = black_bishop
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([3, 5], [4, 4])
+      end
+    end
+    context "when check is diagonal down-left" do
+      it "returns path of the check" do
+        white_queen = Queen.new(:white, [5, 1])
+        piece_move.move_piece([0, 4], [2, 4])
+        board[5][1] = white_queen
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.checking_path).to contain_exactly([4, 2], [3, 3])
+      end
+    end
+    context "when check is diagonal down-left" do
+      it "returns path of the check" do
+        white_queen = Queen.new(:white, [5, 6])
+        piece_move.move_piece([0, 4], [2, 3])
+        board[5][6] = white_queen
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.checking_path).to contain_exactly([4, 5], [3, 4])
+      end
+    end
   end
 end
