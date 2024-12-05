@@ -187,7 +187,7 @@ class PieceMove
       row -= 1
       col -= 1
     end
-    blocked = true if square_in_bounds?(row - 1, col + 1) && @board[row - 1][col - 1].color == piece.color
+    blocked = true if square_in_bounds?(row - 1, col - 1) && @board[row - 1][col - 1].color == piece.color
     opposite_piece_found = 0
     while square_in_bounds?(row - 1, col - 1)
       row -= 1
@@ -386,6 +386,24 @@ class PieceMove
       return horizontal_checking_path(king.current_square,
                                       checking_piece)
     end
+    if checking_path_diagonal?(king.current_square, checking_piece)
+      return diagonal_up_right_checking_path(king.current_square, checking_piece) if checking_path_diagonal_up_right?(
+        king.current_square, checking_piece
+      )
+      return diagonal_up_left_checking_path(king.current_square, checking_piece) if checking_path_diagonal_up_left?(
+        king.current_square, checking_piece
+      )
+
+      if checking_path_diagonal_down_right?(
+        king.current_square, checking_piece
+      )
+        return diagonal_down_right_checking_path(king.current_square,
+                                                 checking_piece)
+      end
+      return diagonal_down_left_checking_path(king.current_square, checking_piece) if checking_path_diagonal_down_left?(
+        king.current_square, checking_piece
+      )
+    end
     vertical_checking_path(king.current_square, checking_piece) if checking_path_vertical?(king.current_square,
                                                                                            checking_piece)
   end
@@ -438,18 +456,95 @@ class PieceMove
     checking_path
   end
 
+  def diagonal_up_right_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row > (checking_piece_row + 1)
+      checking_piece_row += 1
+      checking_piece_col -= 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def diagonal_up_left_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row > (checking_piece_row + 1)
+      checking_piece_row += 1
+      checking_piece_col += 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def diagonal_down_left_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row < (checking_piece_row - 1)
+      checking_piece_row -= 1
+      checking_piece_col += 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def diagonal_down_right_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row < (checking_piece_row - 1)
+      checking_piece_row -= 1
+      checking_piece_col -= 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
   def checking_path_diagonal?(king_square, checking_piece)
+    if king_square[0] != checking_piece.current_square[0] && king_square[1] != checking_piece.current_square[1]
+      return true
+    end
+
+    false
   end
 
   def checking_path_diagonal_up_right?(king_square, checking_piece)
+    if king_square[0] > checking_piece.current_square[0] && king_square[1] < checking_piece.current_square[1]
+      return true
+    end
+
+    false
   end
 
   def checking_path_diagonal_up_left?(king_square, checking_piece)
+    if king_square[0] > checking_piece.current_square[0] && king_square[1] > checking_piece.current_square[1]
+      return true
+    end
+
+    false
   end
 
   def checking_path_diagonal_down_right?(king_square, checking_piece)
+    if king_square[0] < checking_piece.current_square[0] && king_square[1] < checking_piece.current_square[1]
+      return true
+    end
+
+    false
   end
 
   def checking_path_diagonal_down_left?(king_square, checking_piece)
+    if king_square[0] < checking_piece.current_square[0] && king_square[1] > checking_piece.current_square[1]
+      return true
+    end
+
+    false
   end
 end
