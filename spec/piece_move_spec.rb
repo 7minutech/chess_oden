@@ -597,4 +597,24 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#remove_impossible_moves_in_check" do
+    let(:board) { piece_move.board }
+    context "when checking piece an be captured" do
+      it "returns square of checking piece" do
+        black_knight = Knight.new(:black, [4, 6])
+        white_rook = Rook.new(:white, [4, 1])
+        piece_move.move_piece([7, 4], [5, 4])
+        board[4][6] = black_knight
+        board[4][1] = white_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.remove_impossible_moves_in_check
+        expect(white_rook.possible_moves).to contain_exactly([4, 6])
+        piece_move.white_pieces.each do |piece|
+          expect(piece.possible_moves).to be_empty if piece != white_rook
+        end
+      end
+    end
+  end
 end
