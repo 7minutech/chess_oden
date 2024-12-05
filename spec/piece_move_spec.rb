@@ -499,7 +499,7 @@ describe PieceMove do
         piece_move.board_obj.display_board
         piece_move.create_possible_moves
         piece_move.find_checking_pieces(:white)
-        expect(piece_move.checking_path).to contain_exactly([4, 5][4, 4])
+        expect(piece_move.checking_path).to contain_exactly([4, 5], [4, 4])
       end
     end
   end
