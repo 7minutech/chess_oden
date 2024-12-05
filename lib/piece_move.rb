@@ -547,4 +547,20 @@ class PieceMove
 
     false
   end
+
+  def capture_checking_piece?
+    return false unless checking_pieces.length == 1
+
+    checking_piece = checking_pieces[0]
+    if checking_piece.color == :white
+      black_pieces.each do |piece|
+        return true if piece.possible_moves.include?(checking_piece.current_square)
+      end
+    else
+      white_pieces.each do |piece|
+        return true if piece.possible_moves.include?(checking_piece.current_square)
+      end
+    end
+    false
+  end
 end
