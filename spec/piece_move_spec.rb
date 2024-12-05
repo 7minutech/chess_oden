@@ -491,7 +491,7 @@ describe PieceMove do
 
   describe "#checking_path" do
     let(:board) { piece_move.board }
-    context "when rook is checking" do
+    context "when check is horizontal" do
       it "returns path of the check" do
         black_rook = Rook.new(:black, [4, 6])
         piece_move.move_piece([7, 4], [4, 3])
