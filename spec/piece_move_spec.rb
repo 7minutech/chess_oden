@@ -580,4 +580,21 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#capture_checking_piece?" do
+    let(:board) { piece_move.board }
+    context "when checking piece an be captured" do
+      it "returns square of checking piece" do
+        black_knight = Knight.new(:black, [4, 6])
+        white_rook = Rook.new(:white, [4, 1])
+        piece_move.move_piece([7, 4], [5, 4])
+        board[4][6] = black_knight
+        board[4][1] = white_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.capture_checking_piece?).to be true
+      end
+    end
+  end
 end
