@@ -616,5 +616,20 @@ describe PieceMove do
         end
       end
     end
+    context "when a check can be blocked" do
+      it "removes all moves that are blocking" do
+        e6 = board[1][3]
+        white_bishop = Bishop.new(:white, [5, 1])
+        piece_move.move_piece([0, 4], [2, 4])
+        board[5][1] = white_bishop
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.remove_illegal_moves_in_check(:black)
+        expect(e6.possible_moves).to contain_exactly([3, 3])
+        piece_move.black_pieces.each do |piece|
+          expect(piece.possible_moves).to be_empty if piece != e6 && !piece.is_a?(King)
+        end
+      end
+    end
   end
 end
