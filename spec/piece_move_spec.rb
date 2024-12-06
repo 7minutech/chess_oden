@@ -621,6 +621,7 @@ describe PieceMove do
         e6 = board[1][3]
         white_bishop = Bishop.new(:white, [5, 1])
         piece_move.move_piece([0, 4], [2, 4])
+        piece_move.clear_moves
         board[5][1] = white_bishop
         piece_move.board_obj.display_board
         piece_move.create_possible_moves
