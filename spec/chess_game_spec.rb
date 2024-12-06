@@ -43,7 +43,7 @@ describe ChessGame do
       it "returns true" do
         selected_piece = game.board[6][3]
         valid_move = "d3"
-        game.send(:create_moves_for_pieces)
+        game.move_logic.send(:create_possible_moves)
         expect(game.valid_move?(selected_piece, valid_move)).to be true
       end
     end
@@ -51,7 +51,7 @@ describe ChessGame do
       it "returns true" do
         selected_piece = game.board[6][3]
         invalid_move = "h1"
-        game.send(:create_moves_for_pieces)
+        game.move_logic.send(:create_possible_moves)
         expect(game.valid_move?(selected_piece, invalid_move)).to be false
       end
     end
@@ -126,6 +126,18 @@ describe ChessGame do
         final_position_black_pawn = game.move_logic.chess_notation_to_square("e5")
         expect(final_position_white_pawn).to be_a(Pawn).and have_attributes(color: :white)
         expect(final_position_black_pawn).to be_a(Pawn).and have_attributes(color: :black)
+      end
+    end
+  end
+  describe "#checkmate?" do
+    context "when white has checkmated black" do
+      before do
+        moves = %w[e2 e4 e7 e5 f1 c4 b8 c6 d1 h5 g8 f6 h5 f7]
+        allow(game).to receive(:gets).and_return(*moves)
+        ((moves.length / 2)).times { game.send(:play_round) }
+      end
+      xit "returns true" do
+        expect(game.checkmate?).to be true
       end
     end
   end
