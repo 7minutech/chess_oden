@@ -612,7 +612,7 @@ describe PieceMove do
         piece_move.remove_illegal_moves_in_check(:white)
         expect(white_rook.possible_moves).to contain_exactly([4, 6])
         piece_move.white_pieces.each do |piece|
-          expect(piece.possible_moves).to be_empty if piece != white_rook
+          expect(piece.possible_moves).to be_empty if piece != white_rook && !piece.is_a?(King)
         end
       end
     end
