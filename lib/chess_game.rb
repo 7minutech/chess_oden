@@ -76,4 +76,15 @@ class ChessGame
     flip_player_turn
     @move_logic.clear_moves
   end
+
+  def checkmate?
+    if @move_logic.check?
+      if @color_turn == :white
+        return true if @move_logic.black_king.possible_moves.empty?
+      elsif @move_logic.white_king.possible_moves.empty?
+        return true
+      end
+    end
+    false
+  end
 end
