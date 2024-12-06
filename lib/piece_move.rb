@@ -569,7 +569,7 @@ class PieceMove
     return unless check?
 
     find_checking_pieces(color_in_check)
-    legal_moves.push(checking_path) if possible_block?
+    checking_path.each { |move| legal_moves.push(move) } if possible_block?
     legal_moves.push(checking_pieces[0].current_square) if capture_checking_piece?
     if color_in_check == :white
       white_pieces.each do |piece|
