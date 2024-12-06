@@ -88,12 +88,12 @@ class PieceMove
 
   def remove_impossible_king_moves
     @king_squares.each do |square|
-      piece = board[square[0]][square[1]]
+      king = board[square[0]][square[1]]
       enemy_moves = []
       (0..7).each do |board_row|
         (0..7).each do |board_col|
           piece_on_square = board[board_row][board_col]
-          next unless piece_on_square != " " && piece_on_square.color != piece.color
+          next unless piece_on_square != " " && piece_on_square.color != king.color
 
           piece_on_square.possible_moves.each do |move|
             if piece_on_square.is_a?(Pawn)
@@ -105,11 +105,11 @@ class PieceMove
         end
       end
       enemy_moves = enemy_moves.uniq
-      piece.possible_moves.dup.each do |move|
+      king.possible_moves.dup.each do |move|
         # binding.pry
-        piece.possible_moves.delete(move) if enemy_moves.include?(move)
-        if board[move[0]][move[1]] != " " && board[move[0]][move[1]].color == piece.color
-          piece.possible_moves.delete(move)
+        king.possible_moves.delete(move) if enemy_moves.include?(move)
+        if board[move[0]][move[1]] != " " && board[move[0]][move[1]].color == king.color
+          king.possible_moves.delete(move)
         end
       end
     end
