@@ -609,7 +609,7 @@ describe PieceMove do
         board[4][1] = white_rook
         piece_move.board_obj.display_board
         piece_move.create_possible_moves
-        piece_move.remove_illegal_moves_in_check
+        piece_move.remove_illegal_moves_in_check(:white)
         expect(white_rook.possible_moves).to contain_exactly([4, 6])
         piece_move.white_pieces.each do |piece|
           expect(piece.possible_moves).to be_empty if piece != white_rook
