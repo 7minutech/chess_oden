@@ -2,7 +2,7 @@ require_relative "board"
 require "pry-byebug"
 
 class PieceMove
-  attr_reader :board_obj, :board, :checking_pieces, :white_pieces, :black_pieces
+  attr_reader :board_obj, :board, :checking_pieces, :white_pieces, :black_pieces, :black_king, :white_king
 
   def initialize
     @board_obj = Board.new
@@ -140,6 +140,7 @@ class PieceMove
   def create_possible_moves
     create_moves
     remove_impossible_moves
+    # binding.pry if board[1][5].is_a?(Queen)
   end
 
   def clear_moves
@@ -323,6 +324,7 @@ class PieceMove
     @board[old_square[0]][old_square[1]] = " "
     @board[new_square[0]][new_square[1]] = piece
     piece.current_square = [new_square[0], new_square[1]]
+    create_possible_moves
   end
 
   def square_in_bounds?(row, col)
@@ -347,6 +349,7 @@ class PieceMove
     @king_squares.each do |square|
       return true if attacking_moves.include?(square)
     end
+    # binding.pry if board[1][5].is_a?(Queen)
     false
   end
 
@@ -571,6 +574,8 @@ class PieceMove
     find_checking_pieces(color_in_check)
     checking_path.each { |move| legal_moves.push(move) } if possible_block?
     legal_moves.push(checking_pieces[0].current_square) if capture_checking_piece?
+    # binding.pry
+
     if color_in_check == :white
       white_pieces.each do |piece|
         piece.possible_moves.filter! { |move| legal_moves.include?(move) } unless piece.is_a?(King)
