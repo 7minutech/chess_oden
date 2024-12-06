@@ -563,4 +563,22 @@ class PieceMove
     end
     false
   end
+
+  def remove_illegal_moves_in_check(color_in_check)
+    legal_moves = []
+    return unless check?
+
+    find_checking_pieces(color_in_check)
+    legal_moves.push(checking_path) if possible_block?
+    legal_moves.push(checking_pieces[0].current_square) if capture_checking_piece?
+    if color_in_check == :white
+      white_pieces.each do |piece|
+        piece.possible_moves.filter! { |move| legal_moves.include?(move) } unless piece.is_a?(King)
+      end
+    else
+      black_pieces.each do |piece|
+        piece.possible_moves.filter! { |move| legal_moves.include?(move) } unless piece.is_a?(King)
+      end
+    end
+  end
 end
