@@ -10,11 +10,6 @@ class ChessGame
     @selected_next_square = nil
   end
 
-  def create_moves_for_pieces
-    @move_logic.create_moves
-    @move_logic.remove_impossible_moves
-  end
-
   def flip_player_turn
     @color_turn = if @color_turn == :white
                     :black
@@ -72,7 +67,7 @@ class ChessGame
   end
 
   def play_round
-    create_moves_for_pieces
+    @move_logic.create_possible_moves
     valid_piece_input
     valid_move_input
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
