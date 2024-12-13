@@ -79,13 +79,12 @@ class ChessGame
 
   def checkmate?
     if @move_logic.check?
-      # binding.pry
       if @color_turn == :black
         @move_logic.remove_illegal_moves_in_check(:black)
-        return true if @move_logic.black_king.possible_moves.empty?
+        return true if @move_logic.black_king.possible_moves.empty? && !@move_logic.legal_moves?(:black)
       else
         @move_logic.remove_illegal_moves_in_check(:white)
-        return true if @move_logic.white_king.possible_moves.empty?
+        return true if @move_logic.white_king.possible_moves.empty? && !@move_logic.legal_moves?(:white)
       end
     end
     false
