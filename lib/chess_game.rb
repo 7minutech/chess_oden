@@ -79,6 +79,7 @@ class ChessGame
 
   def checkmate?
     if @move_logic.check?
+      # binding.pry
       if @color_turn == :black
         @move_logic.remove_illegal_moves_in_check(:black)
         return true if @move_logic.black_king.possible_moves.empty?
@@ -88,5 +89,10 @@ class ChessGame
       end
     end
     false
+  end
+
+  def play_game
+    play_round until checkmate?
+    puts "Game over"
   end
 end
