@@ -582,4 +582,17 @@ class PieceMove
       end
     end
   end
+
+  def legal_moves?(color_in_check)
+    if color_in_check == :white
+      @white_pieces.each do |piece|
+        return true if piece.possible_moves.length.positive?
+      end
+    else
+      @black_pieces.each do |piece|
+        return true if piece.possible_moves.length.positive?
+      end
+    end
+    false
+  end
 end
