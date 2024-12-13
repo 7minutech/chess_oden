@@ -80,9 +80,11 @@ class ChessGame
   def checkmate?
     if @move_logic.check?
       if @color_turn == :white
+        @move_logic.remove_illegal_moves_in_check(:black)
         return true if @move_logic.black_king.possible_moves.empty?
-      elsif @move_logic.white_king.possible_moves.empty?
-        return true
+      else
+        @move_logic.remove_illegal_moves_in_check(:white)
+        return true if @move_logic.white_king.possible_moves.empty?
       end
     end
     false
