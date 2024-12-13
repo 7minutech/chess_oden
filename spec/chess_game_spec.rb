@@ -132,11 +132,9 @@ describe ChessGame do
   describe "#checkmate?" do
     context "when white has checkmated black" do
       before do
-        moves = %w[e2 e4 e7 e5 f1 c4 b8 c6 d1 h5 g8 f6]
+        moves = %w[e2 e4 e7 e5 f1 c4 b8 c6 d1 h5 g8 f6 h5 f7]
         allow(game).to receive(:gets).and_return(*moves)
         ((moves.length / 2)).times { game.send(:play_round) }
-        game.move_logic.create_possible_moves
-        game.move_logic.move_piece([3, 7], [1, 5])
         game.move_logic.board_obj.display_board
       end
       it "returns true" do
