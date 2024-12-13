@@ -142,4 +142,19 @@ describe ChessGame do
       end
     end
   end
+
+  describe "#play_game" do
+    context "when white has checkmated black" do
+      before do
+        moves = %w[e2 e4 e7 e5 f1 c4 b8 c6 d1 h5 g8 f6 h5 f7]
+        allow(game).to receive(:gets).and_return(*moves)
+      end
+      it "returns game over message" do
+        game_over_message = "Game over"
+        allow(game).to receive(:puts)
+        expect(game).to receive(:puts).with(game_over_message).once
+        game.play_game
+      end
+    end
+  end
 end
