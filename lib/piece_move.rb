@@ -121,6 +121,7 @@ class PieceMove
   end
 
   def create_moves
+    clear_pieces
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
