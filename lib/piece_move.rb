@@ -2,13 +2,18 @@ require_relative "board"
 require "pry-byebug"
 
 class PieceMove
-  attr_reader :board_obj, :board
+  attr_reader :board_obj, :board, :checking_pieces, :white_pieces, :black_pieces, :black_king, :white_king
 
   def initialize
     @board_obj = Board.new
     @board = @board_obj.board
     @board_obj.fill_board
     @king_squares = []
+    @white_pieces = []
+    @black_pieces = []
+    @white_king = nil
+    @black_king = nil
+    @checking_pieces = []
   end
 
   def self.convert_chess_notation(chess_notation)
@@ -83,12 +88,12 @@ class PieceMove
 
   def remove_impossible_king_moves
     @king_squares.each do |square|
-      piece = board[square[0]][square[1]]
+      king = board[square[0]][square[1]]
       enemy_moves = []
       (0..7).each do |board_row|
         (0..7).each do |board_col|
           piece_on_square = board[board_row][board_col]
-          next unless piece_on_square != " " && piece_on_square.color != piece.color
+          next unless piece_on_square != " " && piece_on_square.color != king.color
 
           piece_on_square.possible_moves.each do |move|
             if piece_on_square.is_a?(Pawn)
@@ -100,11 +105,11 @@ class PieceMove
         end
       end
       enemy_moves = enemy_moves.uniq
-      piece.possible_moves.dup.each do |move|
+      king.possible_moves.dup.each do |move|
         # binding.pry
-        piece.possible_moves.delete(move) if enemy_moves.include?(move)
-        if board[move[0]][move[1]] != " " && board[move[0]][move[1]].color == piece.color
-          piece.possible_moves.delete(move)
+        king.possible_moves.delete(move) if enemy_moves.include?(move)
+        if board[move[0]][move[1]] != " " && board[move[0]][move[1]].color == king.color
+          king.possible_moves.delete(move)
         end
       end
     end
@@ -116,12 +121,26 @@ class PieceMove
   end
 
   def create_moves
+    clear_pieces
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
-        piece_on_square.create_possible_moves if piece_on_square != " "
+        next unless piece_on_square != " "
+
+        piece_on_square.create_possible_moves
+        if piece_on_square.color == :white
+
+          @white_pieces.push(piece_on_square)
+        else
+          @black_pieces.push(piece_on_square)
+        end
       end
     end
+  end
+
+  def create_possible_moves
+    create_moves
+    remove_impossible_moves
   end
 
   def clear_moves
@@ -134,6 +153,11 @@ class PieceMove
         end
       end
     end
+  end
+
+  def clear_pieces
+    @white_pieces.clear
+    @black_pieces.clear
   end
 
   # must create valid moves for other pieces before king
@@ -150,7 +174,11 @@ class PieceMove
           remove_impossible_queen_moves(row, col) if piece_on_square.is_a?(Queen)
           remove_impossible_rook_moves(row, col) if piece_on_square.is_a?(Rook)
         end
-        @king_squares.push([row, col]) if piece_on_square != " " && piece_on_square.is_a?(King)
+        next unless piece_on_square != " " && piece_on_square.is_a?(King)
+
+        @king_squares.push([row, col])
+        @white_king = piece_on_square if piece_on_square.color == :white
+        @black_king = piece_on_square if piece_on_square.color == :black
       end
     end
   end
@@ -160,7 +188,7 @@ class PieceMove
       row -= 1
       col -= 1
     end
-    blocked = true if square_in_bounds?(row - 1, col + 1) && @board[row - 1][col - 1].color == piece.color
+    blocked = true if square_in_bounds?(row - 1, col - 1) && @board[row - 1][col - 1].color == piece.color
     opposite_piece_found = 0
     while square_in_bounds?(row - 1, col - 1)
       row -= 1
@@ -292,15 +320,279 @@ class PieceMove
 
   def move_piece(old_square, new_square)
     piece = @board[old_square[0]][old_square[1]]
-    # binding.pry
     @board[old_square[0]][old_square[1]] = " "
     @board[new_square[0]][new_square[1]] = piece
     piece.current_square = [new_square[0], new_square[1]]
+    create_possible_moves
   end
 
   def square_in_bounds?(row, col)
     return true if row.between?(0, 7) && col.between?(0, 7)
 
+    false
+  end
+
+  def check?
+    attacking_moves = []
+    @white_pieces.each do |piece|
+      piece.possible_moves.each do |move|
+        attacking_moves.push(move)
+      end
+    end
+    @black_pieces.each do |piece|
+      piece.possible_moves.each do |move|
+        attacking_moves.push(move)
+      end
+    end
+    attacking_moves = attacking_moves.uniq
+    @king_squares.each do |square|
+      return true if attacking_moves.include?(square)
+    end
+    false
+  end
+
+  def find_checking_pieces(color_in_check)
+    checking_pieces.clear
+    if color_in_check == :white
+      black_pieces.each do |piece|
+        checking_pieces.push(piece) if piece.possible_moves.include?(@white_king.current_square)
+      end
+    else
+      white_pieces.each do |piece|
+        checking_pieces.push(piece) if piece.possible_moves.include?(@black_king.current_square)
+      end
+    end
+  end
+
+  def possible_block?
+    knight_or_pawn = checking_pieces.any? { |piece| piece.is_a?(Pawn) || piece.is_a?(Knight) }
+    unless knight_or_pawn
+      return true if checking_pieces.length == 1
+
+      return false
+
+    end
+    false
+  end
+
+  def checking_path
+    checking_piece = checking_pieces[0]
+    king = if checking_piece.color == :white
+             @black_king
+           else
+             @white_king
+           end
+    if checking_path_horizontal?(king.current_square,
+                                 checking_piece)
+      return horizontal_checking_path(king.current_square,
+                                      checking_piece)
+    end
+    if checking_path_diagonal?(king.current_square, checking_piece)
+      return diagonal_up_right_checking_path(king.current_square, checking_piece) if checking_path_diagonal_up_right?(
+        king.current_square, checking_piece
+      )
+      return diagonal_up_left_checking_path(king.current_square, checking_piece) if checking_path_diagonal_up_left?(
+        king.current_square, checking_piece
+      )
+
+      if checking_path_diagonal_down_right?(
+        king.current_square, checking_piece
+      )
+        return diagonal_down_right_checking_path(king.current_square,
+                                                 checking_piece)
+      end
+      return diagonal_down_left_checking_path(king.current_square, checking_piece) if checking_path_diagonal_down_left?(
+        king.current_square, checking_piece
+      )
+    end
+    vertical_checking_path(king.current_square, checking_piece) if checking_path_vertical?(king.current_square,
+                                                                                           checking_piece)
+  end
+
+  def checking_path_horizontal?(king_square, checking_piece)
+    return true if king_square[0] == checking_piece.current_square[0]
+
+    false
+  end
+
+  def checking_path_vertical?(king_square, checking_piece)
+    return true if king_square[1] == checking_piece.current_square[1]
+
+    false
+  end
+
+  def horizontal_checking_path(king_square, checking_piece)
+    row = king_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    if king_square[1] < checking_piece_col
+      while king_square[1] < (checking_piece_col - 1)
+        checking_piece_col -= 1
+        checking_path.push([row, checking_piece_col])
+      end
+    else
+      while king_square[1] > checking_piece_col + 1
+        checking_piece_col += 1
+        checking_path.push([row, checking_piece_col])
+      end
+    end
+    checking_path
+  end
+
+  def vertical_checking_path(king_square, checking_piece)
+    col = king_square[1]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_path = []
+    if king_square[0] < checking_piece_row
+      while king_square[0] < (checking_piece_row - 1)
+        checking_piece_row -= 1
+        checking_path.push([checking_piece_row, col])
+      end
+    else
+      while king_square[0] > (checking_piece_row + 1)
+        checking_piece_row += 1
+        checking_path.push([checking_piece_row, col])
+      end
+    end
+    checking_path
+  end
+
+  def diagonal_up_right_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row > (checking_piece_row + 1)
+      checking_piece_row += 1
+      checking_piece_col -= 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def diagonal_up_left_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row > (checking_piece_row + 1)
+      checking_piece_row += 1
+      checking_piece_col += 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def diagonal_down_left_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row < (checking_piece_row - 1)
+      checking_piece_row -= 1
+      checking_piece_col += 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def diagonal_down_right_checking_path(king_square, checking_piece)
+    king_row = king_square[0]
+    checking_piece_row = checking_piece.current_square[0]
+    checking_piece_col = checking_piece.current_square[1]
+    checking_path = []
+    while king_row < (checking_piece_row - 1)
+      checking_piece_row -= 1
+      checking_piece_col -= 1
+      checking_path.push([checking_piece_row, checking_piece_col])
+    end
+    checking_path
+  end
+
+  def checking_path_diagonal?(king_square, checking_piece)
+    if king_square[0] != checking_piece.current_square[0] && king_square[1] != checking_piece.current_square[1]
+      return true
+    end
+
+    false
+  end
+
+  def checking_path_diagonal_up_right?(king_square, checking_piece)
+    if king_square[0] > checking_piece.current_square[0] && king_square[1] < checking_piece.current_square[1]
+      return true
+    end
+
+    false
+  end
+
+  def checking_path_diagonal_up_left?(king_square, checking_piece)
+    if king_square[0] > checking_piece.current_square[0] && king_square[1] > checking_piece.current_square[1]
+      return true
+    end
+
+    false
+  end
+
+  def checking_path_diagonal_down_right?(king_square, checking_piece)
+    if king_square[0] < checking_piece.current_square[0] && king_square[1] < checking_piece.current_square[1]
+      return true
+    end
+
+    false
+  end
+
+  def checking_path_diagonal_down_left?(king_square, checking_piece)
+    if king_square[0] < checking_piece.current_square[0] && king_square[1] > checking_piece.current_square[1]
+      return true
+    end
+
+    false
+  end
+
+  def capture_checking_piece?
+    return false unless checking_pieces.length == 1
+
+    checking_piece = checking_pieces[0]
+    if checking_piece.color == :white
+      black_pieces.each do |piece|
+        return true if piece.possible_moves.include?(checking_piece.current_square)
+      end
+    else
+      white_pieces.each do |piece|
+        return true if piece.possible_moves.include?(checking_piece.current_square)
+      end
+    end
+    false
+  end
+
+  def remove_illegal_moves_in_check(color_in_check)
+    legal_moves = []
+    return unless check?
+
+    find_checking_pieces(color_in_check)
+    checking_path.each { |move| legal_moves.push(move) } if possible_block?
+    legal_moves.push(checking_pieces[0].current_square) if capture_checking_piece?
+    if color_in_check == :white
+      white_pieces.each do |piece|
+        piece.possible_moves.filter! { |move| legal_moves.include?(move) } unless piece.is_a?(King)
+      end
+    else
+      black_pieces.each do |piece|
+        piece.possible_moves.filter! { |move| legal_moves.include?(move) } unless piece.is_a?(King)
+      end
+    end
+  end
+
+  def legal_moves?(color_in_check)
+    if color_in_check == :white
+      @white_pieces.each do |piece|
+        return true if piece.possible_moves.length.positive?
+      end
+    else
+      @black_pieces.each do |piece|
+        return true if piece.possible_moves.length.positive?
+      end
+    end
     false
   end
 end

@@ -10,11 +10,6 @@ class ChessGame
     @selected_next_square = nil
   end
 
-  def create_moves_for_pieces
-    @move_logic.create_moves
-    @move_logic.remove_impossible_moves
-  end
-
   def flip_player_turn
     @color_turn = if @color_turn == :white
                     :black
@@ -72,13 +67,31 @@ class ChessGame
   end
 
   def play_round
-    create_moves_for_pieces
+    @move_logic.clear_moves
+    @move_logic.create_possible_moves
     valid_piece_input
     valid_move_input
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
     @move_logic.board_obj.display_board
     flip_player_turn
-    @move_logic.clear_moves
+  end
+
+  def checkmate?
+    if @move_logic.check?
+      if @color_turn == :black
+        @move_logic.remove_illegal_moves_in_check(:black)
+        return true if @move_logic.black_king.possible_moves.empty? && !@move_logic.legal_moves?(:black)
+      else
+        @move_logic.remove_illegal_moves_in_check(:white)
+        return true if @move_logic.white_king.possible_moves.empty? && !@move_logic.legal_moves?(:white)
+      end
+    end
+    false
+  end
+
+  def play_game
+    play_round until checkmate?
+    puts "Game over"
   end
 end

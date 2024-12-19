@@ -377,4 +377,260 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#check?" do
+    let(:board) { piece_move.board }
+    context "when white king is in check by a pawn" do
+      it "returns true" do
+        white_king = King.new(:white, [4, 3])
+        black_pawn = Pawn.new(:black, [3, 4])
+        board[4][3] = white_king
+        board[3][4] = black_pawn
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be true
+      end
+    end
+    context "when black king is in check by a pawn" do
+      it "returns true" do
+        black_king = King.new(:black, [3, 4])
+        white_pawn = Pawn.new(:white, [4, 3])
+        board[3][4] = black_king
+        board[4][3] = white_pawn
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be true
+      end
+    end
+    context "when white king is not in check" do
+      it "returns false" do
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be false
+      end
+    end
+    context "when white king is in check by black queen" do
+      it "returns true" do
+        white_king = King.new(:white, [4, 3])
+        black_queen = Queen.new(:black, [2, 1])
+        board[4][3] = white_king
+        board[2][1] = black_queen
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        expect(piece_move.check?).to be true
+      end
+    end
+  end
+
+  describe "#checking_pieces" do
+    let(:board) { piece_move.board }
+    context "when 2 pieces are checking the king" do
+      it "returns a list of the checking pieces" do
+        black_queen = Queen.new(:black, [2, 1])
+        black_rook = Rook.new(:black, [4, 6])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[2][1] = black_queen
+        board[4][6] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_pieces.length).to eq(2)
+        expect(piece_move.checking_pieces).to contain_exactly(Queen, Rook)
+      end
+    end
+  end
+
+  describe "#possible_block?" do
+    let(:board) { piece_move.board }
+    context "when king check can be blocked" do
+      it "returns true" do
+        black_rook = Rook.new(:black, [4, 6])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[4][6] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.possible_block?).to be true
+      end
+    end
+    context "when 2 pieces are checking the king" do
+      it "returns false" do
+        black_queen = Queen.new(:black, [2, 1])
+        black_rook = Rook.new(:black, [4, 6])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[2][1] = black_queen
+        board[4][6] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.possible_block?).to be false
+      end
+    end
+    context "when king checked by a knight" do
+      it "returns false" do
+        black_knight = Knight.new(:black, [5, 5])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[5][5] = black_knight
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.possible_block?).to be false
+      end
+    end
+    context "when king checked by a pawn" do
+      it "returns false" do
+        piece_move.move_piece([0, 4], [3, 4])
+        piece_move.move_piece([6, 3], [4, 3])
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.possible_block?).to be false
+      end
+    end
+  end
+
+  describe "#checking_path" do
+    let(:board) { piece_move.board }
+    context "when check is horizontal right" do
+      it "returns path of the check" do
+        black_rook = Rook.new(:black, [4, 6])
+        piece_move.move_piece([7, 4], [4, 3])
+        board[4][6] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([4, 5], [4, 4])
+      end
+    end
+    context "when check is horizontal left" do
+      it "returns path of the check" do
+        white_rook = Rook.new(:white, [5, 4])
+        piece_move.move_piece([0, 4], [2, 4])
+        board[5][4] = white_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.checking_path).to contain_exactly([4, 4], [3, 4])
+      end
+    end
+    context "when check is vertical up" do
+      it "returns path of the check" do
+        black_rook = Rook.new(:black, [2, 3])
+        piece_move.move_piece([7, 4], [5, 3])
+        board[2][3] = black_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([3, 3], [4, 3])
+      end
+    end
+    context "when check is vertical up" do
+      it "returns path of the check" do
+        white_rook = Rook.new(:white, [4, 0])
+        piece_move.move_piece([0, 4], [4, 6])
+        board[4][0] = white_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.checking_path).to contain_exactly([4, 1], [4, 2], [4, 3], [4, 4], [4, 5])
+      end
+    end
+    context "when check is diagonal up-left" do
+      it "returns path of the check" do
+        black_bishop = Bishop.new(:black, [2, 1])
+        piece_move.move_piece([7, 4], [5, 4])
+        board[2][1] = black_bishop
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([3, 2], [4, 3])
+      end
+    end
+    context "when check is diagonal up-right" do
+      it "returns path of the check" do
+        black_bishop = Bishop.new(:black, [2, 6])
+        piece_move.move_piece([7, 4], [5, 3])
+        board[2][6] = black_bishop
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.checking_path).to contain_exactly([3, 5], [4, 4])
+      end
+    end
+    context "when check is diagonal down-left" do
+      it "returns path of the check" do
+        white_queen = Queen.new(:white, [5, 1])
+        piece_move.move_piece([0, 4], [2, 4])
+        board[5][1] = white_queen
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.checking_path).to contain_exactly([4, 2], [3, 3])
+      end
+    end
+    context "when check is diagonal down-right" do
+      it "returns path of the check" do
+        white_queen = Queen.new(:white, [5, 6])
+        piece_move.move_piece([0, 4], [2, 3])
+        board[5][6] = white_queen
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:black)
+        expect(piece_move.checking_path).to contain_exactly([4, 5], [3, 4])
+      end
+    end
+  end
+
+  describe "#capture_checking_piece?" do
+    let(:board) { piece_move.board }
+    context "when checking piece an be captured" do
+      it "returns square of checking piece" do
+        black_knight = Knight.new(:black, [4, 6])
+        white_rook = Rook.new(:white, [4, 1])
+        piece_move.move_piece([7, 4], [5, 4])
+        board[4][6] = black_knight
+        board[4][1] = white_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.find_checking_pieces(:white)
+        expect(piece_move.capture_checking_piece?).to be true
+      end
+    end
+  end
+
+  describe "#remove_illegal_moves_in_check" do
+    let(:board) { piece_move.board }
+    context "when checking piece an be captured" do
+      it "returns square of checking piece" do
+        black_knight = Knight.new(:black, [4, 6])
+        white_rook = Rook.new(:white, [4, 1])
+        piece_move.move_piece([7, 4], [5, 4])
+        board[4][6] = black_knight
+        board[4][1] = white_rook
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.remove_illegal_moves_in_check(:white)
+        expect(white_rook.possible_moves).to contain_exactly([4, 6])
+        piece_move.white_pieces.each do |piece|
+          expect(piece.possible_moves).to be_empty if piece != white_rook && !piece.is_a?(King)
+        end
+      end
+    end
+    context "when a check can be blocked" do
+      it "removes all moves that are blocking" do
+        e6 = board[1][3]
+        white_bishop = Bishop.new(:white, [5, 1])
+        piece_move.move_piece([0, 4], [2, 4])
+        piece_move.clear_moves
+        board[5][1] = white_bishop
+        piece_move.board_obj.display_board
+        piece_move.create_possible_moves
+        piece_move.remove_illegal_moves_in_check(:black)
+        expect(e6.possible_moves).to contain_exactly([3, 3])
+        piece_move.black_pieces.each do |piece|
+          expect(piece.possible_moves).to be_empty if piece != e6 && !piece.is_a?(King)
+        end
+      end
+    end
+  end
 end
