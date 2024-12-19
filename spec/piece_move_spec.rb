@@ -673,4 +673,29 @@ describe PieceMove do
       end
     end
   end
+  describe "#remove_pinned_moves" do
+    let(:board) { piece_move.board }
+    context "when a white knight is pinned by a black rook" do
+      it "removes all the knight's moves" do
+        piece_move.move_piece([7, 4], [5, 4])
+        piece_move.move_piece([7, 1], [4, 4])
+        piece_move.move_piece([0, 0], [2, 4])
+        knight = board[4][4]
+        piece_move.board_obj.display_board
+        piece_move.remove_pinned_moves
+        expect(knight.possible_moves).to be_empty
+      end
+    end
+    context "when a black pawn is pinned by a white bishop" do
+      it "removes all the pawn's moves" do
+        piece_move.move_piece([0, 4], [2, 4])
+        piece_move.move_piece([1, 3], [3, 3])
+        piece_move.move_piece([7, 5], [5, 1])
+        pawn = board[3][3]
+        piece_move.board_obj.display_board
+        piece_move.remove_pinned_moves
+        expect(pawn.possible_moves).to be_empty
+      end
+    end
+  end
 end
