@@ -139,6 +139,7 @@ class PieceMove
   end
 
   def create_possible_moves
+    clear_moves
     create_moves
     remove_impossible_moves
   end
@@ -605,8 +606,28 @@ class PieceMove
     create_possible_moves
     check_on_board = check?
     board[row][col] = piece
+    create_possible_moves
     return true if check_on_board
 
     false
+  end
+
+  def remove_pinned_moves
+    pinned_pieces = white_pieces.filter { |piece| pinned?(piece) } + black_pieces.filter { |piece| pinned?(piece) }
+    pinned_pieces.each do |piece|
+      row = piece.current_square[0]
+      col = piece.current_square[1]
+      board[row][col] = " "
+      create_possible_moves
+      if piece.color == :white
+        find_checking_pieces(:white)
+      else
+        find_checking_pieces(:black)
+      end
+      legal_moves = checking_pieces.map(&:current_square) + checking_path
+      piece.possible_moves.filter! { |move| legal_moves.include?(move) }
+      piece.possible_moves = []
+      board[row][col] = piece
+    end
   end
 end
