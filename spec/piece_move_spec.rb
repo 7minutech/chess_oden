@@ -633,4 +633,31 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#pinned?" do
+    let(:board) { piece_move.board }
+    context "when a knight is pinned by a rook" do
+      it "returns true" do
+        black_rook = Rook.new(:black, [2, 4])
+        white_king = King.new(:white, [5, 4])
+        white_knight = Knight.new(:white, [4, 4])
+        board[2][4] = black_rook
+        board[5][4] = white_king
+        board[4][4] = white_knight
+        piece_move.create_moves
+        piece_move.board_obj.display_board
+        expect(piece_move.pinned?(white_knight)).to be true
+      end
+    end
+    context "when a pawn is pinned by a bishop" do
+      it "returns true" do
+        piece_move.move_piece([0, 4], [2, 1])
+        piece_move.move_piece([7, 2], [5, 4])
+        piece_move.move_piece([1, 0], [3, 2])
+        pawn = board[3][2]
+        piece_move.board_obj.display_board
+        expect(piece_move.pinned?(pawn)).to be true
+      end
+    end
+  end
 end
