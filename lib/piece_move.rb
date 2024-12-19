@@ -595,4 +595,18 @@ class PieceMove
     end
     false
   end
+
+  def pinned?(piece)
+    return false if piece.is_a?(King)
+
+    row = piece.current_square[0]
+    col = piece.current_square[1]
+    board[row][col] = " "
+    create_possible_moves
+    check_on_board = check?
+    board[row][col] = piece
+    return true if check_on_board
+
+    false
+  end
 end
