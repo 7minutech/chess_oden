@@ -659,5 +659,18 @@ describe PieceMove do
         expect(piece_move.pinned?(pawn)).to be true
       end
     end
+    context "when a piece is not pinned" do
+      it "returns false" do
+        piece_move.move_piece([0, 4], [2, 1])
+        piece_move.move_piece([7, 2], [5, 4])
+        piece_move.move_piece([1, 0], [3, 2])
+        piece_move.move_piece([0, 1], [4, 3])
+        pawn = board[3][2]
+        knight = board[4][3]
+        piece_move.board_obj.display_board
+        expect(piece_move.pinned?(pawn)).to be false
+        expect(piece_move.pinned?(knight)).to be false
+      end
+    end
   end
 end
