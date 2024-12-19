@@ -125,7 +125,7 @@ class PieceMove
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
-        next unless piece_on_square != " "
+        next unless piece_on_square != " " && !piece_on_square.pinned
 
         piece_on_square.create_possible_moves
         if piece_on_square.color == :white
@@ -148,7 +148,7 @@ class PieceMove
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
-        if piece_on_square != " "
+        if piece_on_square != " " && !piece_on_square.pinned
           piece_on_square.possible_moves.clear
           piece_on_square.attacking_moves.clear if piece_on_square.is_a?(Pawn)
         end
@@ -165,10 +165,11 @@ class PieceMove
   # other pieces moves dictate where the king can go
   # b/c kings moves that put them in check are invalid
   def remove_impossible_non_king_moves
+    @king_squares.clear
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
-        if piece_on_square != " " && !piece_on_square.is_a?(King)
+        if piece_on_square != " " && !piece_on_square.is_a?(King) && !piece_on_square.pinned
           remove_impossible_bishop_moves(row, col) if piece_on_square.is_a?(Bishop)
           remove_impossible_knight_moves(row, col) if piece_on_square.is_a?(Knight)
           remove_impossible_pawn_moves(row, col) if piece_on_square.is_a?(Pawn)
@@ -615,6 +616,7 @@ class PieceMove
   def remove_pinned_moves
     pinned_pieces = white_pieces.filter { |piece| pinned?(piece) } + black_pieces.filter { |piece| pinned?(piece) }
     pinned_pieces.each do |piece|
+      piece.pinned = true
       row = piece.current_square[0]
       col = piece.current_square[1]
       board[row][col] = " "
@@ -626,8 +628,8 @@ class PieceMove
       end
       legal_moves = checking_pieces.map(&:current_square) + checking_path
       piece.possible_moves.filter! { |move| legal_moves.include?(move) }
-      piece.possible_moves = []
       board[row][col] = piece
     end
+    pinned_pieces.each { |piece| piece.pinned = false }
   end
 end
