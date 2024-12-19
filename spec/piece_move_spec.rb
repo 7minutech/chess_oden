@@ -697,5 +697,21 @@ describe PieceMove do
         expect(pawn.possible_moves).to be_empty
       end
     end
+    context "when white and black are both pinned" do
+      it "removes the illegal moves for both sides" do
+        piece_move.move_piece([0, 4], [2, 4])
+        piece_move.move_piece([1, 3], [3, 3])
+        piece_move.move_piece([7, 5], [5, 1])
+        piece_move.move_piece([7, 4], [5, 6])
+        piece_move.move_piece([0, 3], [3, 4])
+        piece_move.move_piece([7, 2], [4, 5])
+        black_pawn = board[3][3]
+        white_bishop = board[4][5]
+        piece_move.board_obj.display_board
+        piece_move.remove_pinned_moves
+        expect(black_pawn.possible_moves).to be_empty
+        expect(white_bishop.possible_moves).to contain_exactly([3, 4])
+      end
+    end
   end
 end
