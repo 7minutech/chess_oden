@@ -1,5 +1,5 @@
 class Pawn
-  attr_accessor :color, :current_square, :possible_moves, :attacking_moves
+  attr_accessor :color, :current_square, :possible_moves, :attacking_moves, :pinned
   attr_reader :starting_square
 
   def initialize(color = nil, current_square = nil)
@@ -8,6 +8,7 @@ class Pawn
     @starting_square = current_square
     @possible_moves = []
     @attacking_moves = []
+    @pinned = false
   end
 
   def self.starting_range?(row, col)

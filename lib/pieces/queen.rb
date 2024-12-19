@@ -1,10 +1,11 @@
 class Queen
-  attr_accessor :color, :current_square, :possible_moves
+  attr_accessor :color, :current_square, :possible_moves, :pinned
 
   def initialize(color = nil, current_square = nil)
     @color = color
     @current_square = current_square
     @possible_moves = []
+    @pinned = false
   end
 
   def to_s
