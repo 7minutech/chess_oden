@@ -365,14 +365,12 @@ describe PieceMove do
     end
     context "when a king has move that put him in check" do
       it "removes impossible moves" do
-        white_king = King.new(:white, [4, 3])
+        white_king = board[7][4]
         black_rook_c6 = Rook.new(:black, [3, 2])
-        board[4][3] = white_king
         board[3][2] = black_rook_c6
+        piece_move.move_piece([7, 4], [4, 3])
         piece_move.board_obj.display_board
-        piece_move.create_moves
-        piece_move.remove_impossible_non_king_moves
-        piece_move.remove_impossible_king_moves
+        piece_move.create_possible_moves
         expect(white_king.possible_moves).to contain_exactly([3, 2], [5, 3], [5, 4], [4, 4])
       end
     end
@@ -382,9 +380,8 @@ describe PieceMove do
     let(:board) { piece_move.board }
     context "when white king is in check by a pawn" do
       it "returns true" do
-        white_king = King.new(:white, [4, 3])
         black_pawn = Pawn.new(:black, [3, 4])
-        board[4][3] = white_king
+        piece_move.move_piece([7, 4], [4, 3])
         board[3][4] = black_pawn
         piece_move.board_obj.display_board
         piece_move.create_possible_moves
@@ -411,9 +408,8 @@ describe PieceMove do
     end
     context "when white king is in check by black queen" do
       it "returns true" do
-        white_king = King.new(:white, [4, 3])
+        piece_move.move_piece([7, 4], [4, 3])
         black_queen = Queen.new(:black, [2, 1])
-        board[4][3] = white_king
         board[2][1] = black_queen
         piece_move.board_obj.display_board
         piece_move.create_possible_moves
@@ -639,10 +635,9 @@ describe PieceMove do
     context "when a knight is pinned by a rook" do
       it "returns true" do
         black_rook = Rook.new(:black, [2, 4])
-        white_king = King.new(:white, [5, 4])
+        piece_move.move_piece([7, 4], [5, 4])
         white_knight = Knight.new(:white, [4, 4])
         board[2][4] = black_rook
-        board[5][4] = white_king
         board[4][4] = white_knight
         piece_move.create_moves
         piece_move.board_obj.display_board
