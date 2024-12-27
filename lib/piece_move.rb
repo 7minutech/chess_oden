@@ -13,6 +13,7 @@ class PieceMove
     @black_pieces = []
     @white_king = nil
     @black_king = nil
+    @kings = []
     @checking_pieces = []
   end
 
@@ -87,8 +88,7 @@ class PieceMove
   end
 
   def remove_impossible_king_moves
-    @king_squares.each do |square|
-      king = board[square[0]][square[1]]
+    @kings.each do |king|
       enemy_moves = []
       (0..7).each do |board_row|
         (0..7).each do |board_col|
@@ -111,6 +111,18 @@ class PieceMove
         if board[move[0]][move[1]] != " " && board[move[0]][move[1]].color == king.color
           king.possible_moves.delete(move)
         end
+      end
+      next if king.possible_moves.empty?
+
+      king.possible_moves.dup.each do |move|
+        # binding.pry if @black_king.possible_moves[0] == [1, 5]
+        row = king.current_square[0]
+        col = king.current_square[1]
+        removed_piece = @board[move[0]][move[1]]
+        @board[move[0]][move[1]] = king
+        king.possible_moves.delete(move) if check?
+        @board[row][col] = king
+        @board[move[0]][move[1]] = removed_piece
       end
     end
   end
@@ -165,7 +177,6 @@ class PieceMove
   # other pieces moves dictate where the king can go
   # b/c kings moves that put them in check are invalid
   def remove_impossible_non_king_moves
-    @king_squares.clear
     (0..7).each do |row|
       (0..7).each do |col|
         piece_on_square = board[row][col]
@@ -178,9 +189,10 @@ class PieceMove
         end
         next unless piece_on_square != " " && piece_on_square.is_a?(King)
 
-        @king_squares.push([row, col])
+        @kings.clear
         @white_king = piece_on_square if piece_on_square.color == :white
         @black_king = piece_on_square if piece_on_square.color == :black
+        @kings = [@white_king, @black_king]
       end
     end
   end
@@ -347,8 +359,8 @@ class PieceMove
       end
     end
     attacking_moves = attacking_moves.uniq
-    @king_squares.each do |square|
-      return true if attacking_moves.include?(square)
+    @kings.each do |king|
+      return true if attacking_moves.any? { |move| king.current_square == (move) }
     end
     false
   end
