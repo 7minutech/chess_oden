@@ -86,6 +86,37 @@ describe PieceMove do
         expect(e7.possible_moves).to contain_exactly([2, 4])
       end
     end
+    context "when en pessant from black is possible" do
+      it "has the move to capture en pessant" do
+        board = piece_move.board_obj.board
+        d4 = Pawn.new(:black, [4, 3])
+        board[4][3] = d4
+        piece_move.move_piece([6, 4], [4, 4])
+        piece_move.board_obj.display_board
+        expect(d4.possible_moves).to include([5, 4])
+      end
+    end
+    context "when en pessant from white is possible" do
+      it "has the move to capture en pessant" do
+        board = piece_move.board_obj.board
+        piece_move.move_piece([6, 4], [3, 4])
+        e5 = board[3][4]
+        piece_move.move_piece([1, 3], [3, 3])
+        piece_move.board_obj.display_board
+        expect(e5.possible_moves).to include([2, 3])
+      end
+    end
+    context "when en pessant from white is was possible 1 turn ago" do
+      it "dos not have the move to capture en pessant" do
+        board = piece_move.board_obj.board
+        piece_move.move_piece([6, 4], [3, 4])
+        e5 = board[3][4]
+        piece_move.move_piece([1, 3], [3, 3])
+        piece_move.move_piece([6, 0], [5, 0])
+        piece_move.board_obj.display_board
+        expect(e5.possible_moves).not_to include([2, 3])
+      end
+    end
   end
 
   describe "#remove_impossible_bishop_moves" do

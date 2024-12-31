@@ -54,7 +54,9 @@ class PieceMove
       end
       next unless move[0] != row && move[1] != col
 
-      piece.possible_moves.delete([move[0], move[1]]) unless square != " " && square.color != piece.color
+      unless (square != " " && square.color != piece.color) || en_pessant?(move, piece.color)
+        piece.possible_moves.delete([move[0], move[1]])
+      end
     end
   end
 
@@ -130,6 +132,7 @@ class PieceMove
   def remove_impossible_moves
     remove_impossible_non_king_moves
     remove_impossible_king_moves
+    flip_double_moves
   end
 
   def create_moves
@@ -337,7 +340,34 @@ class PieceMove
     @board[old_square[0]][old_square[1]] = " "
     @board[new_square[0]][new_square[1]] = piece
     piece.current_square = [new_square[0], new_square[1]]
+    en_pessant(piece, old_square, new_square)
     create_possible_moves
+  end
+
+  def en_pessant(piece, old_square, new_square)
+    return unless piece.is_a?(Pawn) && (old_square[0] - new_square[0]).abs == 2
+
+    piece.double_move = true
+  end
+
+  def en_pessant?(move, color)
+    row = move[0]
+    col = move[1]
+    if color == :white
+      row += 1
+    else
+      row -= 1
+    end
+    piece = board[row][col]
+    return true if piece.is_a?(Pawn) && piece.color != color && piece.double_move == true
+
+    false
+  end
+
+  def flip_double_moves
+    pieces = black_pieces + white_pieces
+    pieces.filter! { |piece| piece.is_a?(Pawn) }
+    pieces.each { |piece| piece.double_move = false }
   end
 
   def square_in_bounds?(row, col)
