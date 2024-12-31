@@ -128,6 +128,16 @@ describe ChessGame do
         expect(final_position_black_pawn).to be_a(Pawn).and have_attributes(color: :black)
       end
     end
+    context "when en pessant is played" do
+      before do
+        moves = %w[e2 e4 h7 h6 e4 e5 d7 d5 e5 d6 h6 h5]
+        allow(game).to receive(:gets).and_return(*moves)
+        ((moves.length / 2) - 1).times { game.send(:play_round) }
+      end
+      it "capture with en pessant" do
+        expect(game.move_logic.board[3][3]).to eq(" ")
+      end
+    end
   end
   describe "#checkmate?" do
     context "when white has checkmated black" do
