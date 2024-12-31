@@ -338,6 +338,16 @@ class PieceMove
   def move_piece(old_square, new_square)
     piece = @board[old_square[0]][old_square[1]]
     @board[old_square[0]][old_square[1]] = " "
+    if pawn_played_en_pessant?(piece, new_square)
+      row = new_square[0]
+      col = new_square[1]
+      if piece.color == :white
+        row += 1
+      else
+        row -= 1
+      end
+      @board[row][col] = " "
+    end
     @board[new_square[0]][new_square[1]] = piece
     piece.current_square = [new_square[0], new_square[1]]
     en_pessant(piece, old_square, new_square)
@@ -360,6 +370,12 @@ class PieceMove
     end
     piece = board[row][col]
     return true if piece.is_a?(Pawn) && piece.color != color && piece.double_move == true
+
+    false
+  end
+
+  def pawn_played_en_pessant?(piece, move)
+    return true if piece.is_a?(Pawn) && move[1] != piece.current_square[1] && board[move[0]][move[1]] == " "
 
     false
   end
