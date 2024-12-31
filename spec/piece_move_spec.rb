@@ -99,8 +99,8 @@ describe PieceMove do
     context "when en pessant from white is possible" do
       it "has the move to capture en pessant" do
         board = piece_move.board_obj.board
-        e5 = Pawn.new(:white, [3, 4])
-        board[3][4] = e5
+        piece_move.move_piece([6, 4], [3, 4])
+        e5 = board[3][4]
         piece_move.move_piece([1, 3], [3, 3])
         piece_move.board_obj.display_board
         expect(e5.possible_moves).to include([2, 3])
