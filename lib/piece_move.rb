@@ -132,6 +132,7 @@ class PieceMove
   def remove_impossible_moves
     remove_impossible_non_king_moves
     remove_impossible_king_moves
+    flip_double_moves
   end
 
   def create_moves
@@ -361,6 +362,12 @@ class PieceMove
     return true if piece.is_a?(Pawn) && piece.color != color && piece.double_move == true
 
     false
+  end
+
+  def flip_double_moves
+    pieces = black_pieces + white_pieces
+    pieces.filter! { |piece| piece.is_a?(Pawn) }
+    pieces.each { |piece| piece.double_move = false }
   end
 
   def square_in_bounds?(row, col)
