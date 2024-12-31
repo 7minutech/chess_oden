@@ -106,6 +106,17 @@ describe PieceMove do
         expect(e5.possible_moves).to include([2, 3])
       end
     end
+    context "when en pessant from white is was possible 1 turn ago" do
+      it "dos not have the move to capture en pessant" do
+        board = piece_move.board_obj.board
+        piece_move.move_piece([6, 4], [3, 4])
+        e5 = board[3][4]
+        piece_move.move_piece([1, 3], [3, 3])
+        piece_move.move_piece([6, 0], [5, 0])
+        piece_move.board_obj.display_board
+        expect(e5.possible_moves).not_to include([2, 3])
+      end
+    end
   end
 
   describe "#remove_impossible_bishop_moves" do
