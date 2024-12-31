@@ -8,6 +8,7 @@ class ChessGame
     @board = @move_logic.board_obj.board
     @selected_square = nil
     @selected_next_square = nil
+    @turns = 0
   end
 
   def flip_player_turn
@@ -67,14 +68,17 @@ class ChessGame
   end
 
   def play_round
-    @move_logic.clear_moves
-    @move_logic.create_possible_moves
+    if @turns.zero?
+      @move_logic.create_possible_moves
+      @move_logic.board_obj.display_board
+    end
     valid_piece_input
     valid_move_input
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
     @move_logic.board_obj.display_board
     flip_player_turn
+    @turns += 1
   end
 
   def checkmate?
