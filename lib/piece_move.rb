@@ -157,6 +157,7 @@ class PieceMove
     clear_moves
     create_moves
     remove_impossible_moves
+    @kings.each { |king| castle_move(king) }
   end
 
   def clear_moves
@@ -348,7 +349,8 @@ class PieceMove
       end
       @board[row][col] = " "
     end
-    @board[new_square[0]][new_square[1]] = piece
+    @board[new_square[0]][new_square[1]] = piece unless castling?(piece, new_square)
+    castle(piece, new_square) if castling?(piece, new_square)
     piece.current_square = [new_square[0], new_square[1]]
     en_pessant(piece, old_square, new_square)
     promote(piece)
@@ -744,7 +746,9 @@ class PieceMove
     rook_col = king.current_square[1] + 3
     short_rook = board[rook_row][rook_col]
     clear_space = empty_space_between?([king_row, king_col], [rook_row, rook_col])
-    return true if !check? && !king.moved? && !short_rook.moved? && clear_space && can_move_right?(king)
+    if !check? && !king.moved? && short_rook.is_a?(Rook) && !short_rook.moved? && clear_space && can_move_right?(king)
+      return true
+    end
 
     false
   end
@@ -756,7 +760,9 @@ class PieceMove
     rook_col = king.current_square[1] - 4
     long_rook = board[rook_row][rook_col]
     clear_space = empty_space_between?([king_row, king_col], [rook_row, rook_col])
-    return true if !check? && !king.moved? && !long_rook.moved? && clear_space && can_move_left?(king)
+    if !check? && !king.moved? && long_rook.is_a?(Rook) && !long_rook.moved? && clear_space && can_move_left?(king)
+      return true
+    end
 
     false
   end
@@ -814,5 +820,40 @@ class PieceMove
 
   def can_move_left?(king)
     can_move_left1?(king) && can_move_left2?(king)
+  end
+
+  def castle_move(king)
+    row = king.current_square[0]
+    col = king.current_square[1]
+    king.possible_moves.push([row, col + 3]) if short_castle?(king)
+    king.possible_moves.push([row, col - 4]) if long_castle?(king)
+  end
+
+  def castling?(piece, move)
+    row = piece.current_square[0]
+    long_col = piece.current_square[1] - 4
+    short_col = piece.current_square[1] + 3
+    short_move = [row, short_col]
+    long_move = [row, long_col]
+    return true if piece.is_a?(King) && (move == short_move || move == long_move)
+
+    false
+  end
+
+  def castle(king, move)
+    king_row = king.current_square[0]
+    king_col = king.current_square[1]
+    rook_row = move[0]
+    rook_col = move[1]
+    rook = board[rook_row][rook_col]
+    board[king_row][king_col] = " "
+    board[rook_row][rook_col] = " "
+    if king_col < rook_col
+      board[king_row][king_col + 2] = king
+      board[rook_row][rook_row - 2] = rook
+    else
+      board[king_row][king_col - 2] = king
+      board[rook_row][rook_col + 3] = rook
+    end
   end
 end
