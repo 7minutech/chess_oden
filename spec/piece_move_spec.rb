@@ -740,4 +740,54 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#promotion?" do
+    context "pawn has promoted" do
+      before do
+        allow(piece_move).to receive(:gets).and_return("R")
+      end
+      it "returns true" do
+        a2 = piece_move.board[6][0]
+        piece_move.move_piece([6, 0], [0, 0])
+        piece_move.board_obj.display_board
+        expect(piece_move.promotion?(a2)).to be true
+      end
+    end
+    context "pawn has not promoted" do
+      it "returns false" do
+        a2 = piece_move.board[6][0]
+        piece_move.move_piece([6, 0], [4, 0])
+        piece_move.board_obj.display_board
+        expect(piece_move.promotion?(a2)).to be false
+      end
+    end
+  end
+  describe "#promote" do
+    context "when a pawn has promoted to a knight" do
+      before do
+        new_piece = "N"
+        allow(piece_move).to receive(:gets).and_return(new_piece)
+      end
+      it "replaces pawn with knight" do
+        a2 = piece_move.board[6][0]
+        piece_move.move_piece([6, 0], [0, 0])
+        piece_move.promote(a2)
+        piece_move.board_obj.display_board
+        expect(piece_move.board[0][0]).to be_kind_of(Knight)
+      end
+    end
+    context "when invalid inputs is given twice then a correct one" do
+      before do
+        allow(piece_move).to receive(:gets).and_return("Z", "K", "R") # Invalid, invalid, then valid
+      end
+      it "prints 2 error messages, then plays the move and promotes correctly" do
+        prompt_message = "Piece format N:Knight, Q:Queen, R:Rook, B:Bishop\nWhich pieces would you like to promote to?:"
+        error_message = "Invalid: must be in chess notation format N:Knight, Q:Queen, R:Rook, B:Bishop"
+        allow(piece_move).to receive(:puts).with(prompt_message)
+        expect(piece_move).to receive(:puts).with(error_message).twice
+        piece_move.move_piece([6, 0], [0, 0])
+        expect(piece_move.board[0][0]).to be_kind_of(Rook)
+      end
+    end
+  end
 end
