@@ -351,6 +351,7 @@ class PieceMove
     @board[new_square[0]][new_square[1]] = piece
     piece.current_square = [new_square[0], new_square[1]]
     en_pessant(piece, old_square, new_square)
+    promote(piece)
     create_possible_moves
   end
 
@@ -372,6 +373,51 @@ class PieceMove
     return true if piece.is_a?(Pawn) && piece.color != color && piece.double_move == true
 
     false
+  end
+
+  def promotion?(piece)
+    return true if piece.is_a?(Pawn) && (piece.current_square[0].zero? || piece.current_square[0] == 7)
+
+    false
+  end
+
+  def promote(piece)
+    return unless promotion?(piece)
+
+    new_piece = valid_promotion_input
+    row = piece.current_square[0]
+    col = piece.current_square[1]
+    color = piece.color
+    pieces = {
+      "N" => Knight.new(color, [row, col]),
+      "Q" => Queen.new(color, [row, col]),
+      "B" => Bishop.new(color, [row, col]),
+      "R" => Rook.new(color, [row, col])
+    }
+    board[row][col] = pieces[new_piece]
+  end
+
+  def promotion_input
+    print "Piece format N:Knight, Q:Queen, R:Rook, B:Bishop\nWhich pieces would you like to promote to?: "
+    gets.chomp.upcase
+  end
+
+  def valid_promotion_input?(input)
+    possible_inputs = %w[N Q B R]
+    return true if possible_inputs.include?(input)
+
+    false
+  end
+
+  def valid_promotion_input
+    piece_input = promotion_input
+    until valid_promotion_input?(piece_input)
+      print "\n"
+      p piece_input
+      puts "Invalid: must be in chess notation format N:Knight, Q:Queen, R:Rook, B:Bishop"
+      piece_input = promotion_input
+    end
+    piece_input
   end
 
   def pawn_played_en_pessant?(piece, move)
