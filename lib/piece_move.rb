@@ -736,4 +736,83 @@ class PieceMove
     end
     pinned_pieces.each { |piece| piece.pinned = false }
   end
+
+  def short_castle?(king)
+    king_row = king.current_square[0]
+    king_col = king.current_square[1]
+    rook_row = king.current_square[0]
+    rook_col = king.current_square[1] + 3
+    short_rook = board[rook_row][rook_col]
+    clear_space = empty_space_between?([king_row, king_col], [rook_row, rook_col])
+    return true if !check? && !king.moved? && !short_rook.moved? && clear_space && can_move_right?(king)
+
+    false
+  end
+
+  def long_castle?(king)
+    king_row = king.current_square[0]
+    king_col = king.current_square[1]
+    rook_row = king.current_square[0]
+    rook_col = king.current_square[1] - 4
+    long_rook = board[rook_row][rook_col]
+    clear_space = empty_space_between?([king_row, king_col], [rook_row, rook_col])
+    return true if !check? && !king.moved? && !long_rook.moved? && clear_space && can_move_left?(king)
+
+    false
+  end
+
+  def empty_space_between?(starting_square, ending_square)
+    row = starting_square[0]
+    starting_col = starting_square[1]
+    ending_col = ending_square[1]
+    until (starting_col - ending_col).abs == 1
+      if starting_col < ending_col
+        starting_col += 1
+      else
+        starting_col -= 1
+      end
+      return false if board[row][starting_col] != " "
+    end
+    true
+  end
+
+  def can_move_right1?(king)
+    row = king.current_square[0]
+    col = king.current_square[1]
+    king.possible_moves.include?([row, col + 1])
+  end
+
+  def can_move_left1?(king)
+    row = king.current_square[0]
+    col = king.current_square[1]
+    king.possible_moves.include?([row, col - 1])
+  end
+
+  def can_move_right2?(king)
+    row = king.current_square[0]
+    col = king.current_square[1]
+    removed_piece = board[row][col + 2]
+    board[row][col + 2] = king
+    checked = check?
+    board[row][col + 2] = removed_piece
+    !checked
+  end
+
+  def can_move_left2?(king)
+    row = king.current_square[0]
+    col = king.current_square[1]
+    removed_piece = board[row][col + 2]
+    board[row][col + 2] = king
+    checked = check?
+    board[row][col + 2] = removed_piece
+    !checked
+  end
+
+  def can_move_right?(king)
+    can_move_right1?(king) && can_move_right2?(king)
+  end
+
+  def can_move_left?(king)
+    can_move_left1?(king) && can_move_left2?(king)
+  end
 end
