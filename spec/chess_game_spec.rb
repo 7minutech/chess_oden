@@ -138,6 +138,20 @@ describe ChessGame do
         expect(game.move_logic.board[3][3]).to eq(" ")
       end
     end
+    context "when white castles" do
+      before do
+        moves = %w[e2 e4 d7 d5 f1 c4 e7 e6 g1 f3 e6 e5 e1 h1]
+        allow(game).to receive(:gets).and_return(*moves)
+        7.times { game.send(:play_round) }
+      end
+      it "is a valid move and places pieces correctly" do
+        error_message = "h1 is not a valid move"
+        game.move_logic.board_obj.display_board
+        expect(game.board[7][6]).to be_kind_of(King)
+        expect(game.board[7][5]).to be_kind_of(Rook)
+        expect(game).not_to receive(:puts).with(error_message)
+      end
+    end
   end
   describe "#checkmate?" do
     context "when white has checkmated black" do

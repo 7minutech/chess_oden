@@ -816,4 +816,31 @@ describe PieceMove do
       end
     end
   end
+  describe "#castle" do
+    context "when white king can castle long" do
+      it "the pieces move on the board correctly" do
+        king = piece_move.board[7][4]
+        piece_move.board[7][3] = " "
+        piece_move.board[7][2] = " "
+        piece_move.board[7][1] = " "
+        piece_move.create_possible_moves
+        piece_move.castle(king, [7, 0])
+        piece_move.board_obj.display_board
+        expect(piece_move.board[7][2]).to be_kind_of(King)
+        expect(piece_move.board[7][3]).to be_kind_of(Rook)
+      end
+    end
+    context "when white king can castle short" do
+      it "the pieces move on the board correctly" do
+        king = piece_move.board[7][4]
+        piece_move.board[7][5] = " "
+        piece_move.board[7][6] = " "
+        piece_move.create_possible_moves
+        piece_move.castle(king, [7, 7])
+        piece_move.board_obj.display_board
+        expect(piece_move.board[7][6]).to be_kind_of(King)
+        expect(piece_move.board[7][5]).to be_kind_of(Rook)
+      end
+    end
+  end
 end
