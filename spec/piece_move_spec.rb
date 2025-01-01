@@ -790,4 +790,30 @@ describe PieceMove do
       end
     end
   end
+
+  describe "#short_castle?" do
+    context "when white king can castle short" do
+      it "returns true" do
+        king = piece_move.board[7][4]
+        piece_move.board[7][5] = " "
+        piece_move.board[7][6] = " "
+        piece_move.create_possible_moves
+        piece_move.board_obj.display_board
+        expect(piece_move.short_castle?(king)).to be true
+      end
+    end
+  end
+  describe "#long_castle?" do
+    context "when white king can castle long" do
+      it "returns true" do
+        king = piece_move.board[7][4]
+        piece_move.board[7][3] = " "
+        piece_move.board[7][2] = " "
+        piece_move.board[7][1] = " "
+        piece_move.create_possible_moves
+        piece_move.board_obj.display_board
+        expect(piece_move.long_castle?(king)).to be true
+      end
+    end
+  end
 end
