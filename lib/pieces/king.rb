@@ -77,4 +77,8 @@ class King
 
     false
   end
+
+  def moved?
+    @current_square != @starting_square
+  end
 end

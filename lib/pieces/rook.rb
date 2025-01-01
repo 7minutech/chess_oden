@@ -50,4 +50,8 @@ class Rook
 
     false
   end
+
+  def moved?
+    @current_square != @starting_square
+  end
 end
