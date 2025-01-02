@@ -277,5 +277,17 @@ describe ChessGame do
         game.play_game
       end
     end
+    context "when threefold repetition occurs" do
+      before do
+        allow(game).to receive(:gets).and_return("e2", "e4", "e7", "e5", "e1", "e2", "e8", "e7", "e2", "e1", "e7",
+                                                 "e8", "e1", "e2", "e8", "e7", "e2", "e1", "e7", "e8")
+      end
+      it "exits game" do
+        draw_message = "Game over"
+        allow(game).to receive(:puts)
+        expect(game).to receive(:puts).with(draw_message).once
+        game.play_game
+      end
+    end
   end
 end
