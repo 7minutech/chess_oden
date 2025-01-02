@@ -20,6 +20,42 @@ class ChessGame
                   end
   end
 
+  def draw?
+    @draw == true
+  end
+
+  def king_v_king?
+    return true if @move_logic.white_pieces.length == 1 && @move_logic.black_pieces.length == 1
+
+    false
+  end
+
+  def king_v_bishop?
+    white_pieces = @move_logic.white_pieces
+    black_pieces = @move_logic.black_pieces
+    white_bishop = white_pieces.any? { |piece| piece.is_a?(Bishop) }
+    black_bishop = black_pieces.any? { |piece| piece.is_a?(Bishop) }
+    return true if (white_pieces.length == 2 && white_bishop) && black_pieces.length == 1
+    return true if (black_pieces.length == 2 && black_bishop) && white_pieces.length == 1
+
+    false
+  end
+
+  def king_v_knight
+    white_pieces = @move_logic.white_pieces
+    black_pieces = @move_logic.black_pieces
+    white_bishop = white_pieces.any? { |piece| piece.is_a?(Knight) }
+    black_bishop = black_pieces.any? { |piece| piece.is_a?(Knight) }
+    return true if (white_pieces.length == 2 && white_bishop) && black_pieces.length == 1
+    return true if (black_pieces.length == 2 && black_bishop) && white_pieces.length == 1
+
+    false
+  end
+
+  def insufficient_material?
+    @draw = true if king_v_king? || king_v_bishop? || king_v_knight
+  end
+
   def draw_offer(offer)
     return unless offer == "draw"
 
@@ -38,7 +74,7 @@ class ChessGame
       square = piece_input
     end
     puts "\nSelected Square: #{square}"
-    return if @draw == true
+    return if draw?
 
     translated_move = PieceMove.convert_chess_notation(square)
     @selected_square = @board[translated_move[0]][translated_move[1]]
@@ -55,7 +91,7 @@ class ChessGame
 
   def valid_piece?(square)
     draw_offer(square)
-    unless @draw == true
+    unless draw?
       return false if square == "draw"
       return false unless square.length == 2
 
@@ -65,7 +101,7 @@ class ChessGame
       selected_piece = @board[selected_square[0]][selected_square[1]]
       return true if selected_piece != " " && selected_piece.color == @color_turn
     end
-    return true if @draw == true
+    return true if draw?
 
     false
   end
@@ -81,6 +117,7 @@ class ChessGame
   end
 
   def valid_move?(selected_piece, move)
+    # binding.pry
     translated_move = PieceMove.convert_chess_notation(move)
     return true if selected_piece.possible_moves.include?([translated_move[0], translated_move[1]])
 
@@ -99,16 +136,18 @@ class ChessGame
   end
 
   def play_round
+    # binding.pry
     if @turns.zero?
       @move_logic.create_possible_moves
       @move_logic.board_obj.display_board
     end
     valid_piece_input
-    return if @draw == true
+    return if draw?
 
     valid_move_input
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
+    insufficient_material?
     @move_logic.board_obj.display_board
     flip_player_turn
     @turns += 1
@@ -128,7 +167,7 @@ class ChessGame
   end
 
   def play_game
-    play_round until checkmate? || @draw == true
+    play_round until checkmate? || draw?
     puts "Game over"
   end
 end
