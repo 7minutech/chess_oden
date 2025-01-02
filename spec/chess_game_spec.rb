@@ -228,10 +228,6 @@ describe ChessGame do
         expect(game.draw?).to be true
       end
     end
-    context "when there is king and 2 knights vs king" do
-      it "flips draw to true and ends game" do
-      end
-    end
   end
 
   describe "#play_game" do
