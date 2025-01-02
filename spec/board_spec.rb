@@ -82,4 +82,16 @@ describe Board do
       end
     end
   end
+
+  describe "#highlight" do
+    before do
+      chess_board.fill_board
+    end
+    context "when board is filled" do
+      it "displays pieces correctly" do
+        moves = [[0, 0]]
+        chess_board.highlight(moves)
+      end
+    end
+  end
 end

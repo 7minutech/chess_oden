@@ -8,6 +8,7 @@ class Board
 
   WHITE_BACKGROUND = "ffffff".freeze
   GREEN_BACKGROUND = "6a9b41".freeze
+  YELLOW_BACKGROUND = "e0c372".freeze
   def initialize
     @board = Array.new(8) { Array.new(8) { " " } }
   end
@@ -22,6 +23,29 @@ class Board
       print "#{count} "
       row.each_with_index do |col, col_index|
         if (row_index + col_index).even?
+          display_background(col, WHITE_BACKGROUND)
+        else
+          display_background(col, GREEN_BACKGROUND)
+        end
+      end
+      print "\n"
+      count -= 1
+    end
+  end
+
+  def highlight(moves)
+    print "\n"
+    print "  "
+    (97..104).each { |num| print " #{num.chr} " }
+    count = 8
+    print "\n"
+    @board.each_with_index do |row, row_index|
+      print "#{count} "
+      row.each_with_index do |col, col_index|
+        # binding.pry
+        if moves.include?([row_index, col_index])
+          display_background(col, YELLOW_BACKGROUND)
+        elsif (row_index + col_index).even?
           display_background(col, WHITE_BACKGROUND)
         else
           display_background(col, GREEN_BACKGROUND)
