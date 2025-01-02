@@ -10,6 +10,7 @@ class ChessGame
     @selected_next_square = nil
     @turns = 0
     @draw = false
+    @positions = {}
   end
 
   def flip_player_turn
@@ -18,6 +19,25 @@ class ChessGame
                   else
                     :white
                   end
+  end
+
+  def add_position
+    if @positions[@board]
+      @positions[@board] += 1
+    else
+      @positions[@board] = 1
+    end
+  end
+
+  def threefold_repetition?
+    @positions.each_value do |value|
+      return true if value >= 3
+    end
+    false
+  end
+
+  def threefold_repetition
+    @draw = true if threefold_repetition?
   end
 
   def draw?
@@ -136,7 +156,6 @@ class ChessGame
   end
 
   def play_round
-    # binding.pry
     if @turns.zero?
       @move_logic.create_possible_moves
       @move_logic.board_obj.display_board
@@ -148,6 +167,8 @@ class ChessGame
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
     insufficient_material?
+    add_position
+    threefold_repetition
     @move_logic.board_obj.display_board
     flip_player_turn
     @turns += 1
