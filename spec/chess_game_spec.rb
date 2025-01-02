@@ -177,6 +177,61 @@ describe ChessGame do
         expect(game.checkmate?).to be true
       end
     end
+    context "when there is king vs king" do
+      before do
+        game.move_logic.board_obj.clear_board
+        game.board[0][0] = King.new(:white, [0, 0])
+        game.board[7][7] = King.new(:black, [7, 7])
+        game.board[7][6] = Pawn.new(:white, [7, 6])
+        moves = %w[g1 g2 h1 g2]
+        allow(game).to receive(:gets).and_return(*moves)
+        2.times { game.send(:play_round) }
+        game.move_logic.board_obj.display_board
+      end
+      it "flips draw to true and ends game" do
+        expect(game.draw?).to be true
+      end
+    end
+    context "when there is king and Bishop vs king" do
+      before do
+        game.move_logic.board_obj.clear_board
+        game.board[0][0] = King.new(:white, [0, 0])
+        game.board[1][1] = Bishop.new(:white, [1, 1])
+        game.board[7][7] = King.new(:black, [7, 7])
+        game.board[6][6] = Pawn.new(:black, [6, 6])
+        moves = %w[b7 g2]
+        game.move_logic.board_obj.display_board
+        allow(game).to receive(:gets).and_return(*moves)
+        game.send(:play_round)
+        game.move_logic.board_obj.display_board
+      end
+      it "flips draw to true and ends game" do
+        game.move_logic.board_obj.display_board
+        expect(game.draw?).to be true
+      end
+    end
+    context "when there is king and knight vs king" do
+      before do
+        game.move_logic.board_obj.clear_board
+        game.board[0][0] = King.new(:white, [0, 0])
+        game.board[4][7] = Knight.new(:white, [4, 7])
+        game.board[7][7] = King.new(:black, [7, 7])
+        game.board[6][6] = Pawn.new(:black, [6, 6])
+        moves = %w[h4 g2]
+        game.move_logic.board_obj.display_board
+        allow(game).to receive(:gets).and_return(*moves)
+        game.send(:play_round)
+        game.move_logic.board_obj.display_board
+      end
+      it "flips draw to true and ends game" do
+        game.move_logic.board_obj.display_board
+        expect(game.draw?).to be true
+      end
+    end
+    context "when there is king and 2 knights vs king" do
+      it "flips draw to true and ends game" do
+      end
+    end
   end
 
   describe "#play_game" do
