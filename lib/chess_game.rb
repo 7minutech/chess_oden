@@ -45,13 +45,22 @@ class ChessGame
     @board[translated_move[0]][translated_move[1]]
   end
 
+  def square_in_range?(square)
+    row = square[0]
+    col = square[1]
+    return true if row.between?(0, 7) && col.between?(0, 7)
+
+    false
+  end
+
   def valid_piece?(square)
     draw_offer(square)
     unless @draw == true
       return false if square == "draw"
+      return false unless square.length == 2
 
       selected_square = PieceMove.convert_chess_notation(square)
-      return false if selected_square[0].nil? || selected_square[1].nil?
+      return false unless square_in_range?(selected_square)
 
       selected_piece = @board[selected_square[0]][selected_square[1]]
       return true if selected_piece != " " && selected_piece.color == @color_turn
