@@ -152,6 +152,16 @@ describe ChessGame do
         expect(game).not_to receive(:puts).with(error_message)
       end
     end
+    context "when wrong inputs is given" do
+      before do
+        moves = %w[draw d e2 e4]
+        allow(game).to receive(:gets).and_return(*moves)
+        game.send(:play_round)
+      end
+      it "reprompt" do
+        exp
+      end
+    end
   end
   describe "#checkmate?" do
     context "when white has checkmated black" do
@@ -189,6 +199,28 @@ describe ChessGame do
         game_over_message = "Game over"
         allow(game).to receive(:puts)
         expect(game).to receive(:puts).with(game_over_message).once
+        game.play_game
+      end
+    end
+    context "when white offers a draw and black accepts" do
+      before do
+        allow(game).to receive(:gets).and_return("draw", "a")
+      end
+      it "exits game" do
+        draw_message = "Game over"
+        allow(game).to receive(:puts)
+        expect(game).to receive(:puts).with(draw_message).once
+        game.play_game
+      end
+    end
+    context "when white offers draw after a couple of moves" do
+      before do
+        allow(game).to receive(:gets).and_return("e2", "e4", "d7", "d5", "draw", "a")
+      end
+      it "exits game" do
+        draw_message = "Game over"
+        allow(game).to receive(:puts)
+        expect(game).to receive(:puts).with(draw_message).once
         game.play_game
       end
     end
