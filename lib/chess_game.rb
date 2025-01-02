@@ -9,6 +9,7 @@ class ChessGame
     @selected_square = nil
     @selected_next_square = nil
     @turns = 0
+    @draw = false
   end
 
   def flip_player_turn
@@ -19,6 +20,17 @@ class ChessGame
                   end
   end
 
+  def draw_offer(offer)
+    return unless offer == "draw"
+
+    puts "#{@color_turn} offered a draw"
+    puts "Enter a:accept or d:decline"
+    answer = gets.chomp.downcase
+    return unless answer == "a"
+
+    @draw = true
+  end
+
   def valid_piece_input
     square = piece_input
     until valid_piece?(square)
@@ -26,15 +38,25 @@ class ChessGame
       square = piece_input
     end
     puts "\nSelected Square: #{square}"
+    return if @draw == true
+
     translated_move = PieceMove.convert_chess_notation(square)
     @selected_square = @board[translated_move[0]][translated_move[1]]
     @board[translated_move[0]][translated_move[1]]
   end
 
   def valid_piece?(square)
-    selected_square = PieceMove.convert_chess_notation(square)
-    selected_piece = @board[selected_square[0]][selected_square[1]]
-    return true if selected_piece != " " && selected_piece.color == @color_turn
+    draw_offer(square)
+    unless @draw == true
+      return false if square == "draw"
+
+      selected_square = PieceMove.convert_chess_notation(square)
+      return false if selected_square[0].nil? || selected_square[1].nil?
+
+      selected_piece = @board[selected_square[0]][selected_square[1]]
+      return true if selected_piece != " " && selected_piece.color == @color_turn
+    end
+    return true if @draw == true
 
     false
   end
@@ -73,6 +95,8 @@ class ChessGame
       @move_logic.board_obj.display_board
     end
     valid_piece_input
+    return if @draw == true
+
     valid_move_input
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
@@ -95,7 +119,7 @@ class ChessGame
   end
 
   def play_game
-    play_round until checkmate?
+    play_round until checkmate? || @draw == true
     puts "Game over"
   end
 end
