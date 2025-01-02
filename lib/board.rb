@@ -110,4 +110,12 @@ class Board
                          Pawn.new(:white, [row, col])
                        end
   end
+
+  def clear_board
+    (0..7).each do |row|
+      (0..7).each do |col|
+        @board[row][col] = " "
+      end
+    end
+  end
 end
