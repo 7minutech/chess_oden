@@ -156,10 +156,12 @@ describe ChessGame do
       before do
         moves = %w[draw d e2 e4]
         allow(game).to receive(:gets).and_return(*moves)
-        game.send(:play_round)
       end
       it "reprompt" do
-        exp
+        error_message = "draw is not valid, please enter a valid move"
+        allow(game).to receive(:puts)
+        expect(game).to receive(:puts).with(error_message).once
+        game.send(:play_round)
       end
     end
   end
