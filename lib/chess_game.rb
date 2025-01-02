@@ -98,6 +98,7 @@ class ChessGame
 
     translated_move = PieceMove.convert_chess_notation(square)
     @selected_square = @board[translated_move[0]][translated_move[1]]
+    @move_logic.board_obj.highlight(@selected_square.possible_moves)
     @board[translated_move[0]][translated_move[1]]
   end
 
@@ -137,7 +138,6 @@ class ChessGame
   end
 
   def valid_move?(selected_piece, move)
-    # binding.pry
     translated_move = PieceMove.convert_chess_notation(move)
     return true if selected_piece.possible_moves.include?([translated_move[0], translated_move[1]])
 
