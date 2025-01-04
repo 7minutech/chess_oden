@@ -36,7 +36,6 @@ class PieceMove
 
   def remove_impossible_pawn_moves(row, col)
     piece = @board[row][col]
-    # binding.pry if row == 3
     piece.possible_moves.dup.each do |move|
       square = @board[move[0]][move[1]]
       if (move[0] - row).abs == 1 && move[1] == col && square != (" ")
