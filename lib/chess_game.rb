@@ -1,16 +1,97 @@
+require "yaml"
 require_relative "piece_move"
 class ChessGame
   attr_accessor :board, :move_logic
 
-  def initialize
-    @move_logic = PieceMove.new
-    @color_turn = :white
+  def initialize(move_logic = PieceMove.new, color_turn = :white, selected_square = nil, selected_next_square = nil,
+                 turns = 0, draw = false, positions = {})
+    @move_logic = move_logic
+    @color_turn = color_turn
     @board = @move_logic.board_obj.board
-    @selected_square = nil
-    @selected_next_square = nil
-    @turns = 0
-    @draw = false
-    @positions = {}
+    @selected_square = selected_square
+    @selected_next_square = selected_next_square
+    @turns = turns
+    @draw = draw
+    @positions = positions
+  end
+
+  def to_yaml
+    YAML.dump(
+      {
+        move_logic: @move_logic,
+        color_turn: @color_turn,
+        selected_square: @selected_square,
+        selected_next_square: @selected_next_square,
+        turns: @turns,
+        draw: @draw,
+        positions: @positions
+      }
+    )
+  end
+
+  def self.from_yaml(string)
+    data = YAML.load(string,
+                     permitted_classes: [Symbol, PieceMove, Board, Rook, King, Bishop, Knight, Queen, Pawn], aliases: true)
+    loaded_game = new(data[:move_logic], data[:color_turn], data[:selected_square], data[:selected_next_square],
+                      data[:turns], data[:draw], data[:positions])
+    puts "#{data[:color_turn]} to play"
+    loaded_game.move_logic.board_obj.display_board
+    loaded_game.play_game
+  end
+
+  def quit?(input)
+    input == "q"
+  end
+
+  def quit
+    puts "Exiting game..."
+    abort
+  end
+
+  def save_game?(input)
+    input == "save"
+  end
+
+  def save_game
+    puts "Enter a name for the save file"
+    save_name = gets.chomp
+    save_file = File.new("lib/saves/#{save_name}.yml", "w")
+    save_file.puts(to_yaml)
+  end
+
+  def load_game?(input)
+    input == "load"
+  end
+
+  def cancel?(input)
+    return false if input != "cancel"
+
+    @selected_next_square = input
+    true
+  end
+
+  def load_game
+    i = 1
+    save_files = {}
+    Dir.foreach("lib/saves") do |filename|
+      next if [".", ".."].include?(filename)
+
+      puts("Save file #{i}: #{filename}")
+      save_files[i.to_s] = filename
+      i += 1
+    end
+    puts save_files
+    puts "Enter the number of the save"
+    save_file_number = gets.chomp
+    p save_files[save_file_number]
+    save_file_data = File.read("lib/saves/#{save_files[save_file_number]}")
+    ChessGame.from_yaml(save_file_data)
+  end
+
+  def commands(command)
+    quit if quit?(command)
+    save_game if save_game?(command)
+    load_game if load_game?(command)
   end
 
   def flip_player_turn
@@ -89,9 +170,11 @@ class ChessGame
 
   def valid_piece_input
     square = piece_input
+    commands(square)
     until valid_piece?(square)
       puts "#{square} is not valid, please enter a valid move"
       square = piece_input
+      commands(square)
     end
     puts "\nSelected Square: #{square}"
     return if draw?
@@ -138,6 +221,8 @@ class ChessGame
   end
 
   def valid_move?(selected_piece, move)
+    return true if cancel?(move)
+
     translated_move = PieceMove.convert_chess_notation(move)
     return true if selected_piece.possible_moves.include?([translated_move[0], translated_move[1]])
 
@@ -150,6 +235,8 @@ class ChessGame
       puts "#{move} is not a valid move"
       move = move_input
     end
+    return if cancel?(move)
+
     puts "\nSquare to move: #{move}"
     translated_move = PieceMove.convert_chess_notation(move)
     @selected_next_square = [translated_move[0], translated_move[1]]
@@ -157,6 +244,7 @@ class ChessGame
 
   def play_round
     if @turns.zero?
+      display_commands
       @move_logic.create_possible_moves
       @move_logic.board_obj.display_board
     end
@@ -164,6 +252,8 @@ class ChessGame
     return if draw?
 
     valid_move_input
+    return if cancel?(@selected_next_square)
+
     @move_logic.move_piece([@selected_square.current_square[0], @selected_square.current_square[1]],
                            [@selected_next_square[0], @selected_next_square[1]])
     insufficient_material?
@@ -187,8 +277,13 @@ class ChessGame
     false
   end
 
+  def display_commands
+    puts "Commands q:quit save:save game load:load game cancel: to select another piece"
+  end
+
   def play_game
     play_round until checkmate? || draw?
     puts "Game over"
+    abort
   end
 end
