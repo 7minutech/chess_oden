@@ -80,7 +80,6 @@ class ChessGame
       save_files[i.to_s] = filename
       i += 1
     end
-    puts save_files
     puts "Enter the number of the save"
     save_file_number = gets.chomp
     p save_files[save_file_number]
