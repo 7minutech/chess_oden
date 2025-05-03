@@ -65,6 +65,28 @@ Once you’ve installed the necessary dependencies, you can start the game by fo
 
    This will start the chess game in your terminal. Follow the prompts to play the game.
 
+## Playing the Game
+
+Once the game starts, you can play by choosing pieces and moving them around the board. Here's how:
+
+1. **Pick the piece you want to move**:
+   - The game will display the board in the terminal.
+   - Each square on the board is represented by its coordinate (e.g., `a1`, `e2`, `h8`).
+   - To select a piece to move, type the **coordinate** of the square containing the piece you want to move (e.g., `e2` for a pawn or `g1` for a knight).
+
+2. **Choose where to move it**:
+   - After selecting the piece, type the **coordinate** of the square where you'd like to move it (e.g., `e4` to move a pawn from `e2` to `e4`).
+
+3. **Validating the Move**:
+   - The game will check if the move is valid according to chess rules.
+   - If the move is illegal, the game will prompt you to select a valid move.
+
+4. **Switching Turns**:
+   - The game alternates turns between the two players after each valid move. Player 1 (White) always starts.
+
+5. **Ending the Game**:
+   - The game will end when one player is in "checkmate" or if a stalemate occurs. The result will be displayed in the terminal.
+
 ### Terminal Recommendations
 
 - **Recommended Terminal**: The game works best in the **VSCode terminal**. This terminal supports both Unicode characters (like the chess pieces) and color output correctly.
