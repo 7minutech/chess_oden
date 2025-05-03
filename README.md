@@ -1,34 +1,29 @@
-# Command-Line Chess
+# Chess Game
 
-A two-player Chess game built in Ruby that runs entirely in the command line. This project emphasizes modular code structure, rule enforcement, and the ability to save and reload game states.
+A command line-based Chess game where two players can play against each other. The game ensures that players can only make legal moves and correctly declares "check" and "checkmate" situations. It also allows you to save and load the game state at any time.
 
 ## Features
 
-- 🧠 **Fully Functional Chess Logic**  
-  Enforces all standard rules of chess, including:
-  - Legal move validation for each piece
-  - Turn-based play
-  - Check and checkmate detection
-
-- 💾 **Save & Load Games**  
-  Serialize and restore game state at any time during play.
-
-- ✅ **Test Coverage with RSpec**  
-  RSpec tests written for core functionality and logic validation.
-
-- 🧱 **Object-Oriented Design**  
-  Modular class structure with single-responsibility methods for better maintenance and debugging.
-
----
+- Play chess against another person in the terminal.
+- Properly enforce the rules of chess, including illegal move prevention and check/checkmate detection.
+- Save and load game progress.
+- Modular and clean class structure with methods doing only one thing each.
+- Unit tests using RSpec to ensure reliability.
 
 ## Getting Started
 
-### Requirements
+To run the game, follow these steps:
 
-- Ruby 3.x recommended
-- RSpec (for running tests)
+### Prerequisites
 
-### Run the Game
+Make sure you have the following installed:
+
+- **Ruby** (version 2.7+)
+- **Bundler** (if you're using bundler to manage gems)
+
+### Installing Dependencies
+
+If you're using `bundler` to manage dependencies, you can simply run:
 
 ```bash
-ruby chess.rb
+bundle install
