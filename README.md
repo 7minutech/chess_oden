@@ -69,8 +69,8 @@ Once you’ve installed the necessary dependencies, you can start the game by fo
 
 - **Recommended Terminal**: The game works best in the **VSCode terminal**. This terminal supports both Unicode characters (like the chess pieces) and color output correctly.
   
-  **Note**: You may experience issues with color output or Unicode characters in **Windows PowerShell** or **Command Prompt**. For the best experience, use **VSCode terminal**.
+- **Note**: You may experience issues with color output or Unicode characters in **Windows PowerShell** or **Command Prompt**. For the best experience, use **VSCode terminal**.
   
 ### Saving and Loading the Game
 
-You can save and load the game state at any time during your session. Ensure that you follow the instructions in the game’s commands.
+- You can save and load the game state at any time during your session. Ensure that you follow the instructions in the game’s commands.
